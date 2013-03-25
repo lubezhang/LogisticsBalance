@@ -10,11 +10,11 @@
 
 package com.lube.utils.excel;
 
-import java.util.List;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
+
+import java.util.List;
 
 /**<p>功能说明：Excel Cell工具类</p>
  * <p>作者：zhangqh</p>
@@ -35,7 +35,7 @@ public class ExcelSheetCell {
 	public static void createCurrRowTitle(ExcelSheetRow sheetRow,ExcelWorkBook work ,String[] firstRowValue,HSSFCellStyle style) {
 		row = sheetRow.createCurrSheetTitle(work);
 		for (int i = 0; i < firstRowValue.length; i++) {
-			cell = row.createCell((short) i);
+			cell = row.createCell(i);
 			cell.setCellStyle(style);
 //			cell.setEncoding(HSSFCell.ENCODING_UTF_16);
 			cell.setCellValue(firstRowValue[i]);
@@ -68,7 +68,7 @@ public class ExcelSheetCell {
 				try {
 					if (obj[i].toString() != null) {
 
-						cell = row.createCell((short) i);
+						cell = row.createCell(i);
 						cell.setCellStyle(style);
 //						cell.setEncoding(HSSFCell.ENCODING_UTF_16);
 						cell.setCellValue(obj[i].toString());

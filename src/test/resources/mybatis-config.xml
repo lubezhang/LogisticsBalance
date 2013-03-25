@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 配置全局性 cache 的 ( 开 / 关) default:true -->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias alias="tBalance" type="com.lube.replenish.entity.TBalance"/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="mapper/balanceMapper.xml" />
+    </mappers>
+</configuration>

@@ -1,0 +1,13 @@
+*{
+	font-size:12px;
+}
+body {
+    font-family:helvetica,tahoma,verdana,sans-serif;
+    padding:0px;
+    font-size:13px;
+    margin:0;
+}
+.menu-btton{
+    margin: 5px;
+    cursor: pointer;
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lube.test.dao.IStudentDao">
+
+    <resultMap type="StudentEntity" id="studentResultMap">
+        <id property="studentID" column="STUDENT_ID"/>
+        <result property="studentName" column="STUDENT_NAME"/>
+        <result property="studentSex" column="STUDENT_SEX"/>
+        <result property="studentBirthday" column="STUDENT_BIRTHDAY"/>
+    </resultMap>
+
+    <!-- 查询学生，根据id -->
+    <select id="getStudent" parameterType="String" resultType="StudentEntity" resultMap="studentResultMap">
+        <![CDATA[
+            SELECT * from STUDENT_TBL ST
+                WHERE ST.STUDENT_ID = #{studentID}
+        ]]>
+    </select>
+
+    <!-- 查询学生列表 -->
+    <select id="getStudentAll"  resultType="com.lube.test.entity.StudentEntity" resultMap="studentResultMap">
+        <![CDATA[
+            SELECT * from STUDENT_TBL
+        ]]>
+    </select>
+
+</mapper>

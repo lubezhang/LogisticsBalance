@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lube.replenish.dao.IReplenishDao">
+    <!--<cache eviction="FIFO" readOnly="true" size="256" flushInterval="60000"/>-->
+    <resultMap type="tBalance" id="balanceMap">
+        <id property="balanceId" column="BALANCE_ID"/>
+        <result property="customerId" column="CUSTOMER_ID"/>
+        <result property="operatorId" column="OPERATOR_ID"/>
+        <result property="balanceCode" column="BALANCE_CODE"/>
+        <result property="gatherState" column="GATHER_STATE"/>
+        <result property="money" column="MONEY"/>
+        <result property="payoffState" column="PAYOFF_STATE"/>
+        <result property="addresseeDate" column="ADDRESSEE_DATE"/>
+        <result property="addrDateBegin" column="ADDRESSEE_DATE"/>
+        <result property="addrDateEnd" column="ADDRESSEE_DATE"/>
+        <result property="isEdit" column="IS_EDIT"/>
+        <result property="balanceUser" column="BALANCE_USER"/>
+        <result property="operator" column="OPERATOR"/>
+        <result property="operatorDate" column="OPERATOR_DATE"/>
+    </resultMap>
+
+    <insert id="insertBalance" parameterType="tBalance">
+        insert into t_balance
+          (BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE,GATHER_STATE,MONEY,PAYOFF_STATE,ADDRESSEE_DATE,IS_EDIT,BALANCE_USER,OPERATOR,OPERATOR_DATE)
+        values
+          (#{balanceId},#{customerId},#{operatorId},#{balanceCode},#{gatherState},#{money},#{payoffState},#{addresseeDate},#{isEdit},#{balanceUser},#{operator},now())
+    </insert>
+
+    <select id="queryAllBalance" parameterType="tBalance" resultMap="balanceMap">
+        select
+          BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,ADDRESSEE_DATE
+        from
+            t_balance t1,
+            (SELECT * FROM t_dict where dict_type = 1) t2,
+            (SELECT * FROM t_dict where dict_type = 2) t3
+        where
+          t1.PAYOFF_STATE = t2.dict_code and t1.GATHER_STATE = t3.dict_code
+        <if test=" balanceId != null and balanceId != ''">
+            and BALANCE_ID = #{balanceId}
+        </if>
+        <if test=" balanceCode != null and balanceCode != ''">
+            and BALANCE_CODE = #{balanceCode}
+        </if>
+        <if test=" customerId != null and customerId != ''">
+            and CUSTOMER_ID like #{customerId} '%'
+        </if>
+        <if test=" payoffState != null and payoffState != ''">
+            and PAYOFF_STATE = #{payoffState}
+        </if>
+        <if test=" gatherState != null and gatherState != ''">
+            and GATHER_STATE = #{gatherState}
+        </if>
+        <if test=" addrDateBegin != null and addrDateBegin != ''">
+            and ADDRESSEE_DATE >= #{addrDateBegin}
+        </if>
+        <if test=" addrDateEnd != null and addrDateEnd != ''">
+            <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
+        </if>
+    </select>
+
+    <select id="payMoney" parameterType="tBalance" resultType="java.util.HashMap">
+        select IFNULL(sum(t.MONEY), 0) totalMoney from t_balance t where PAYOFF_STATE = 1
+        <if test=" balanceCode != null and balanceCode != ''">
+            and BALANCE_CODE = #{balanceCode}
+        </if>
+        <if test=" customerId != null and customerId != ''">
+            and CUSTOMER_ID like #{customerId} '%'
+        </if>
+        <!--<if test=" payoffState != null and payoffState != ''">-->
+            <!--and PAYOFF_STATE = #{payoffState}-->
+        <!--</if>-->
+        <if test=" gatherState != null and gatherState != ''">
+            and GATHER_STATE = #{gatherState}
+        </if>
+        <if test=" addrDateBegin != null and addrDateBegin != ''">
+            and ADDRESSEE_DATE >= #{addrDateBegin}
+        </if>
+        <if test=" addrDateEnd != null and addrDateEnd != ''">
+            <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
+        </if>
+        group by t.PAYOFF_STATE  order by t.PAYOFF_STATE
+    </select>
+
+    <select id="notPayMoney" parameterType="tBalance" resultType="java.util.HashMap">
+        select IFNULL(sum(t.MONEY), 0) totalMoney from t_balance t where PAYOFF_STATE = 2
+        <if test=" balanceCode != null and balanceCode != ''">
+            and BALANCE_CODE = #{balanceCode}
+        </if>
+        <if test=" customerId != null and customerId != ''">
+            and CUSTOMER_ID like #{customerId} '%'
+        </if>
+        <!--<if test=" payoffState != null and payoffState != ''">-->
+            <!--and PAYOFF_STATE = #{payoffState}-->
+        <!--</if>-->
+        <if test=" gatherState != null and gatherState != ''">
+            and GATHER_STATE = #{gatherState}
+        </if>
+        <if test=" addrDateBegin != null and addrDateBegin != ''">
+            and ADDRESSEE_DATE >= #{addrDateBegin}
+        </if>
+        <if test=" addrDateEnd != null and addrDateEnd != ''">
+            <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
+        </if>
+        group by t.PAYOFF_STATE  order by t.PAYOFF_STATE
+    </select>
+
+    <select id="queryNextBalance" parameterType="tBalance" resultMap="balanceMap">
+        select
+            BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE, GATHER_STATE,MONEY, PAYOFF_STATE,ADDRESSEE_DATE
+        from
+            t_balance t1
+        where
+            t1.is_edit = 0
+        limit 1
+    </select>
+
+    <update id="updateBalance" parameterType="tBalance">
+        update t_balance
+        <set>
+            <if test="customerId != null">
+                CUSTOMER_ID = #{customerId},
+            </if>
+            <if test="gatherState != null">
+                GATHER_STATE = #{gatherState},
+            </if>
+            <if test="money != null">
+                MONEY = #{money},
+            </if>
+            <if test="payoffState != null">
+                PAYOFF_STATE = #{payoffState},
+            </if>
+            <if test="addresseeDate != null">
+                ADDRESSEE_DATE = #{addresseeDate},
+            </if>
+            <if test="1 == 1">
+                IS_EDIT = 1,
+            </if>
+            <if test="1 == 1">
+                OPERATOR_DATE = now(),
+            </if>
+        </set>
+        where BALANCE_ID = #{balanceId}
+    </update>
+</mapper>

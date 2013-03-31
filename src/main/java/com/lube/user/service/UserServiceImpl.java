@@ -21,8 +21,8 @@ public class UserServiceImpl implements IUserService {
     private IUserDao userDao;
 
     @Override
-    public boolean verifyLogin(Operator operator) {
+    public Operator verifyLogin(Operator operator) {
         List<Operator> list = userDao.verifyLogin(operator);
-        return list.size() > 0?true:false;
+        return list.size() > 0?list.get(0):null;
     }
 }

@@ -1,5 +1,6 @@
 package com.lube.common;
 
+import com.lube.user.entity.Operator;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,9 +24,9 @@ public class LicenseInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("=============拦截请求，验证权限==============");
         boolean flag = true;
-        String strLic = "";
-        if (licenseFlag) {
-            if (CommonConst.validLicense) {
+        if (CommonConst.validLicense) {
+            Operator obj = (Operator) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
+            if (null != obj) {
                 flag = true;
             } else {
 //                response.setContentType("application/json;charset=UTF-8");
@@ -36,9 +37,11 @@ public class LicenseInterceptor implements HandlerInterceptor {
 //                response.setCharacterEncoding("UTF-8");
 //                response.setContentType("text/json");
 //                response.getWriter().write("{\"successful\":false,\"message\":\"授权验证失败\"}");
-//                flag = false;
-                response.sendRedirect("/licenseError.html");
+                response.sendRedirect("/login.html");
+                flag = false;
             }
+        } else {
+            response.sendRedirect("/licenseError.html");
         }
         return flag;
     }

@@ -16,5 +16,5 @@ public interface IUserService {
      * @param operator
      * @return
      */
-    boolean verifyLogin(Operator operator);
+    Operator verifyLogin(Operator operator);
 }

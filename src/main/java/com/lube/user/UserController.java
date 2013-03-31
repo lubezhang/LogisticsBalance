@@ -1,12 +1,12 @@
 package com.lube.user;
 
+import com.lube.common.CommonConst;
 import com.lube.user.entity.Operator;
 import com.lube.user.service.IUserService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -40,7 +40,9 @@ public class UserController {
         logger.info("===========检查用户登录信息==========");
         logger.debug(operator);
         Map<String, String> map = new HashMap<String, String>();
-        if(userService.verifyLogin(operator)){
+        Operator oper = userService.verifyLogin(operator);
+        if(null != oper){
+            request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
             map.put("success","true");
         } else {
             map.put("success","false");

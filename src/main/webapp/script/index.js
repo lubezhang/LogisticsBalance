@@ -7,6 +7,7 @@
  */
 
 function loadBizPage(pagePath){
+    debugger;
     $("#main_page").load(pagePath);
 }
 

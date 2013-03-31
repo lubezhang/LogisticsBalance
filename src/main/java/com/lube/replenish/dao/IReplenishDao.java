@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * 快递单数据补录DAO
  */
-@Repository
+@Repository("iReplenishDao")
 @Transactional
 public interface IReplenishDao {
 

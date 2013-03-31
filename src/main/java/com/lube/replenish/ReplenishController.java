@@ -64,19 +64,24 @@ public class ReplenishController {
 
     @RequestMapping("queryBalanceList")
     public @ResponseBody Map<String, Object> queryBalanceList(@RequestParam Map<String, String> params,HttpServletRequest request){
-        TBalance entity = new TBalance();
-        entity.setBalanceCode(params.get("balanceCode"));
-        entity.setPayoffState(params.get("payoffState"));
-        entity.setGatherState(params.get("gatherState"));
-        entity.setCustomerId(params.get("customerId"));
-        entity.setAddrDateBegin(params.get("addrDateBegin"));
-        entity.setAddrDateEnd(params.get("addrDateEnd"));
+//        TBalance entity = new TBalance();
+//        entity.setBalanceCode(params.get("balanceCode"));
+//        entity.setPayoffState(params.get("payoffState"));
+//        entity.setGatherState(params.get("gatherState"));
+//        entity.setCustomerId(params.get("customerId"));
+//        entity.setAddrDateBegin(params.get("addrDateBegin"));
+//        entity.setAddrDateEnd(params.get("addrDateEnd"));
 
         List<Map<String, String>> list = null;
         Map<String, Object> resBody = new HashMap<String, Object>(0);
         try {
-            list = replenishService.queryAllBalance(entity);
-            resBody.put("total", list.size());
+            list = replenishService.queryAllBalance(new HashMap<String, Object>(params));
+            String count = "";
+            if(null != list && list.size() > 0){
+                count = list.get(list.size()-1).get("count");
+                list.remove(list.size()-1);
+            }
+            resBody.put("total", count);
             resBody.put("rows", list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

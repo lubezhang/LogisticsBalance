@@ -4,7 +4,7 @@
         $('#dg').datagrid({
             url:'/replenishController/queryBalanceList.do',
             columns:[[
-                {field:'balanceId',title:'快递单编号',checkbox:true,width:100},
+                {field:'balanceId',title:'快递单编号1',checkbox:true,width:100},
                 {field:'balanceCode',title:'快递单号',width:60,align:"center"},
                 {field:'customerId',title:'客户名称',width:160,align:"center"},
                 {field:'money',title:'金额',width:40,align:"center"},
@@ -15,6 +15,9 @@
                 balanceCode: $("#balanceCode1").val(),
                 payoffState: $('#payoffState1').combobox('getValue'),
                 gatherState: $('#gatherState1').combobox('getValue')
+            },
+            onLoadSuccess:function(){
+                alert(3);
             }
         });
     }

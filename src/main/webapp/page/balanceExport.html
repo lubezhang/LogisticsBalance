@@ -19,7 +19,14 @@
                 addrDateBegin: $('#addresseeDate1').datebox('getValue'),
                 addrDateEnd: $('#addresseeDate2').datebox('getValue')
             },
-            method:"post"
+            method:"post",
+            onLoadSuccess:function(json){
+                //debugger;
+                //alert(json);
+            },
+            onHeaderContextMenu:function(){
+               // alert(8)
+            }
         });
         getTotalMoney();
     }
@@ -95,6 +102,6 @@
     </div>
 </div>
 <form action="/replenishController/exportLogistics.do" name="downloadSubmit" method="post" target="downloadContent">
-    <input type="hidden" name="customerId" value="你爱"/>
+    <input type="hidden" name="customerId" value="you"/>
 </form>
 <iframe id="downloadContent" name="downloadContent" src="" width="0" height="0" frameborder="0"></iframe>

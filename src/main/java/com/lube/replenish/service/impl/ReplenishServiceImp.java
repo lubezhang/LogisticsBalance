@@ -4,7 +4,7 @@ import com.lube.replenish.dao.IReplenishDao;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
 import com.lube.utils.BalanceUtils;
-import com.lube.utils.CommnoConst;
+import com.lube.common.CommnoConst;
 import com.lube.utils.FileUtils;
 import com.lube.utils.LogisticsException;
 import com.lube.utils.excel.ExcelCellStyleUtils;
@@ -95,7 +95,9 @@ public class ReplenishServiceImp implements IReplenishService {
     }
 
     @Override
+    @Deprecated
     public List<Map<String, String>> queryAllBalance(TBalance entity) throws Exception {
+        Map<String, Object> params = BalanceUtils.boToMapForBalance(entity);
         List<TBalance> list = iReplenishDao.queryAllBalance(entity);
         List<Map<String, String>> listMap = new ArrayList<Map<String, String>>(0);
         Map<String, String> entityMap = null;
@@ -106,6 +108,32 @@ public class ReplenishServiceImp implements IReplenishService {
                 map.put("picPath", "/" + CommnoConst.BALANCE_PIC_CONTEXT + File.separator + CommnoConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
                 listMap.add(map);
             }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return listMap;
+    }
+
+    @Override
+    public List<Map<String, String>> queryAllBalance(Map<String, Object> params) throws Exception {
+        int page = Integer.parseInt(params.get("page")+"");
+        int rows = Integer.parseInt(params.get("rows")+"");
+        params.put("page",(page-1)*rows);
+        params.put("rows", rows);
+        List<TBalance> list = iReplenishDao.queryAllBalance(params);
+        int count = iReplenishDao.queryAllBalanceCount(params);
+        List<Map<String, String>> listMap = new ArrayList<Map<String, String>>(0);
+        Map<String, String> entityMap = null;
+        try {
+            for (TBalance t : list) {
+//                entityMap = new HashMap<String, String>(0);
+                entityMap = BeanUtils.describe(t);
+                entityMap.put("picPath", "/" + CommnoConst.BALANCE_PIC_CONTEXT + File.separator + CommnoConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
+                listMap.add(entityMap);
+            }
+            Map tmp = new HashMap();
+            tmp.put("count",count+"");
+            listMap.add(tmp);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

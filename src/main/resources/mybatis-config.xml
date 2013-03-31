@@ -7,11 +7,9 @@
     <!--</settings>-->
 
     <typeAliases>
-        <typeAlias alias="StudentEntity" type="com.lube.test.entity.StudentEntity"/>
         <typeAlias alias="tBalance" type="com.lube.replenish.entity.TBalance"/>
     </typeAliases>
     <mappers>
         <mapper resource="mapper/balanceMapper.xml" />
-        <mapper resource="mapper/StudentMapper.xml" />
     </mappers>
 </configuration>

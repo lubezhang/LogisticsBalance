@@ -42,6 +42,12 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.lube" />
     </bean>
+
+    <mvc:interceptors>
+        <bean class="com.lube.common.LicenseInterceptor" >
+            <property name="licenseFlag"><value>true</value></property>
+        </bean>
+    </mvc:interceptors>
     <!-- 激活annotation功能 -->
     <!--<context:annotation-config />-->
     <!-- 激活annotation功能 -->

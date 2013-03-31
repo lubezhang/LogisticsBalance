@@ -1,13 +1,6 @@
 package com.lube.utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class FileUtils {
     public static void mkdirs(String dir) {
@@ -122,6 +115,50 @@ public class FileUtils {
     public static String parseExtension(String fileName) {
         int lastIndexOfSeparator = fileName.lastIndexOf(".");
         return fileName.substring(lastIndexOfSeparator + 1);
+    }
+
+
+    /**
+     * 将字节对象写入到文件中
+     *
+     * @param bytes
+     */
+    public static void writeBytesToFile(String fileName, byte[] bytes) {
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(new FileOutputStream(fileName));
+            out.writeObject(bytes);
+            out.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public static byte[] readFileToBytes(String filePath) {
+        byte[] bytes = null;
+        try {
+            FileInputStream input = new FileInputStream(filePath);
+            ObjectInputStream objInput = new ObjectInputStream(input);
+            bytes = (byte[]) objInput.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return bytes;
     }
 
     public static void main(String[] args) throws Exception {

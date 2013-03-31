@@ -42,6 +42,7 @@ public interface IReplenishService {
      * @throws Exception
      */
     List<Map<String, String>> queryAllBalance(TBalance entity) throws Exception;
+    List<Map<String, String>> queryAllBalance(Map<String, Object> params) throws Exception;
 
     /**
      * 更新

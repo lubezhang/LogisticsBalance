@@ -26,7 +26,7 @@
           (#{balanceId},#{customerId},#{operatorId},#{balanceCode},#{gatherState},#{money},#{payoffState},#{addresseeDate},#{isEdit},#{balanceUser},#{operator},now())
     </insert>
 
-    <select id="queryAllBalance" parameterType="tBalance" resultMap="balanceMap">
+    <select id="queryAllBalance" parameterType="Map" resultMap="balanceMap">
         select
           BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,ADDRESSEE_DATE
         from
@@ -56,6 +56,38 @@
         <if test=" addrDateEnd != null and addrDateEnd != ''">
             <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
         </if>
+        order by t1.ADDRESSEE_DATE limit #{page},#{rows}
+    </select>
+
+    <select id="queryAllBalanceCount" parameterType="Map" resultType="Integer">
+        select
+          count(BALANCE_ID)
+        from
+          t_balance t1
+        where
+          <![CDATA[1 < 2]]>
+        <if test=" balanceId != null and balanceId != ''">
+            and BALANCE_ID = #{balanceId}
+        </if>
+        <if test=" balanceCode != null and balanceCode != ''">
+            and BALANCE_CODE = #{balanceCode}
+        </if>
+        <if test=" customerId != null and customerId != ''">
+            and CUSTOMER_ID like #{customerId} '%'
+        </if>
+        <if test=" payoffState != null and payoffState != ''">
+            and PAYOFF_STATE = #{payoffState}
+        </if>
+        <if test=" gatherState != null and gatherState != ''">
+            and GATHER_STATE = #{gatherState}
+        </if>
+        <if test=" addrDateBegin != null and addrDateBegin != ''">
+            and ADDRESSEE_DATE >= #{addrDateBegin}
+        </if>
+        <if test=" addrDateEnd != null and addrDateEnd != ''">
+            <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
+        </if>
+
     </select>
 
     <select id="payMoney" parameterType="tBalance" resultType="java.util.HashMap">

@@ -20,9 +20,13 @@ import java.util.Map;
 @Transactional
 public interface IReplenishDao {
 
-    public void insertBalance (TBalance balance);
+    public void insertBalance(TBalance balance);
 
+    @Deprecated
     public List<TBalance> queryAllBalance(TBalance entity);
+    public List<TBalance> queryAllBalance(Map<String, Object> params);
+
+    public int queryAllBalanceCount(Map<String, Object> params);
 
     public int updateBalance(TBalance entity);
 

@@ -30,6 +30,26 @@ function importBalance(){
     );
 }
 
+function testLicense(){
+    $.ajax({
+        type: "POST",
+        url: "/replenishController/importPic.do",
+        data: "name=John&location=Boston",
+        dataType:"json",
+        success: function(msg){
+            debugger;
+            if(typeof msg == "string"){
+                var oJson = eval("("+msg+")");
+                alert(oJson.name);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            debugger;
+            alert("XMLHttpRequest:" +XMLHttpRequest+" \n\n textStatus:"+textStatus+" \n\n errorThrown:"+errorThrown);
+        }
+    });
+}
+
 
 function myformatter(date){
     var y = date.getFullYear();

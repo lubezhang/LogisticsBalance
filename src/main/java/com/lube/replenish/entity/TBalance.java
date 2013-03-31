@@ -134,4 +134,26 @@ public class TBalance{
     public void setOperatorDate(String operatorDate) {
         this.operatorDate = operatorDate;
     }
+
+    @Override
+    public String toString() {
+        return "TBalance{" +
+                "balanceId='" + balanceId + '\'' +
+                ", balanceCode='" + balanceCode + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", operatorId='" + operatorId + '\'' +
+                ", gatherState='" + gatherState + '\'' +
+                ", money=" + money +
+                ", payoffState='" + payoffState + '\'' +
+                ", addresseeDate='" + addresseeDate + '\'' +
+                ", addrDateBegin='" + addrDateBegin + '\'' +
+                ", addrDateEnd='" + addrDateEnd + '\'' +
+                ", isEdit='" + isEdit + '\'' +
+                ", balanceUser='" + balanceUser + '\'' +
+                ", operator='" + operator + '\'' +
+                ", operatorDate='" + operatorDate + '\'' +
+                '}';
+    }
+
+
 }

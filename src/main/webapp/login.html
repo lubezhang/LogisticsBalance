@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>登录</title>
+    <script type="text/javascript" src="/script/jquery/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript">
+        function loginSubmit(){
+            $.post(
+                "/userController/login.do",
+                {"username":$("#username").val(),"password":$("#password").val()},
+                function(json){
+                    alert(json);
+                },
+                "json"
+            );
+        }
+
+        function getLoginInfo(){
+            $.post(
+                "/userController/getLoginInfo.do",
+                {"username":$("#username").val(),"password":$("#password").val()},
+                function(json){
+                    alert(json);
+                },
+                "text"
+            );
+        }
+    </script>
+</head>
+<body>
+
+用户名：<input type="text" id="username" name="username" value="admin"><br/>
+密   码：<input type="password" id="password" name="password" value="admin"> <br/>
+<input type="button" value="登录" onclick="loginSubmit()" />
+<input type="button" value="获取登录用户" onclick="getLoginInfo()" />
+<a href="/userController/getLoginInfo.do">sdfsdf</a>
+</body>
+</html>

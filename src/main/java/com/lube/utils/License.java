@@ -2,12 +2,14 @@ package com.lube.utils;
 
 import com.lube.common.CommonConst;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONString;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,9 +29,20 @@ public class License {
         boolean licFlag = false;
         try {
             byte[] decodedData = decryptByPublicKey(FileUtils.readFileToBytes(CommonConst.LICENSE_FILE_PATH), getPublicKey());
-            String strJson = new String(decodedData);
-            JSONObject jsonObject = JSONObject.fromObject(strJson);
-            if(LicenseUtils.getHostName().equalsIgnoreCase((String) jsonObject.get("hostName"))){
+            JSONObject jsonObject = JSONObject.fromObject(new String(decodedData));
+
+            //机器名是否有效
+            boolean hostNameFlag = LicenseUtils.getHostName().equalsIgnoreCase((String) jsonObject.get("hostName"));
+
+            //是否已经超过试用日期
+            Date currDate = DateUtils.parseDate(DateUtils.getCurrentDate());
+            Date expireDate = DateUtils.parseDate(String.valueOf(jsonObject.get("expireDate")));
+            boolean expireDateFlag = currDate.before(expireDate);
+
+            //校验MAC地址
+            boolean MACFlag = LicenseUtils.getHostMac().equalsIgnoreCase(String.valueOf(jsonObject.get("MAC")));
+
+            if(hostNameFlag && expireDateFlag && MACFlag){
                 licFlag = true;
             } else {
                 throw new Exception("授权无效！");

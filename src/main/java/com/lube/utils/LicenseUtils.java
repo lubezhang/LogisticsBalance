@@ -81,6 +81,8 @@ public class LicenseUtils {
         return strMac;
     }
 
+
+
     /**
      * 创建需要校验的本机信息
      * @return

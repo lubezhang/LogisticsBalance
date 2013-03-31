@@ -22,14 +22,10 @@ public class InitServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        logger.info("=====检查License是否合法====");
-        try {
-            if(License.verifyLicense()){
-                CommonConst.validLicense = true;
-            } else {
-                throw new Exception("系统授权无效！");
-            }
-        } catch (Exception e){
+        logger.info("=====检查授权是否有效====");
+        if(License.verifyLicense()){
+            CommonConst.validLicense = true;
+        } else {
             CommonConst.validLicense = false;
             System.out.println("=====系统授权无效，系统终止启动！====");
             System.exit(0);

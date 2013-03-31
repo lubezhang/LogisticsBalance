@@ -21,13 +21,12 @@ public class LicenseInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("=============preHandle==============");
+        logger.info("=============拦截请求，验证权限==============");
         boolean flag = true;
         String strLic = "";
         if (licenseFlag) {
             if (CommonConst.validLicense) {
                 flag = true;
-                strLic = "=============授权验证成功==============";
             } else {
 //                response.setContentType("application/json;charset=UTF-8");
 //                response.setHeader("Content-Type","application/json;charset=UTF-8");
@@ -38,22 +37,20 @@ public class LicenseInterceptor implements HandlerInterceptor {
 //                response.setContentType("text/json");
 //                response.getWriter().write("{\"successful\":false,\"message\":\"授权验证失败\"}");
 //                flag = false;
-                strLic = "=============授权验证失败==============";
                 response.sendRedirect("/licenseError.html");
             }
         }
-        logger.debug(strLic);
         return flag;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        logger.info("---------------postHandle--------------");
+//        logger.info("---------------postHandle--------------");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        logger.info("++++++++++++++afterCompletion++++++++++++++");
+//        logger.info("++++++++++++++afterCompletion++++++++++++++");
     }
 
     public boolean isLicenseFlag() {

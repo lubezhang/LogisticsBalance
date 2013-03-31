@@ -8,8 +8,10 @@
 
     <typeAliases>
         <typeAlias alias="tBalance" type="com.lube.replenish.entity.TBalance"/>
+        <typeAlias alias="operator" type="com.lube.user.entity.Operator"/>
     </typeAliases>
     <mappers>
         <mapper resource="mapper/balanceMapper.xml" />
+        <mapper resource="mapper/operatorMapper.xml" />
     </mappers>
 </configuration>

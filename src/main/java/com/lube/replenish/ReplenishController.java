@@ -3,19 +3,17 @@ package com.lube.replenish;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
 import com.lube.utils.BalanceUtils;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +32,7 @@ import java.util.Map;
 public class ReplenishController {
     private static Logger logger = Logger.getLogger(ReplenishController.class);
 
-    @Autowired
+    @Resource
     private IReplenishService replenishService;
 
     /**

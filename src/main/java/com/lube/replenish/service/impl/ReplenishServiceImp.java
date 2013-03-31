@@ -1,22 +1,25 @@
 package com.lube.replenish.service.impl;
 
+import com.lube.common.CommonConst;
 import com.lube.replenish.dao.IReplenishDao;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
 import com.lube.utils.BalanceUtils;
-import com.lube.common.CommnoConst;
 import com.lube.utils.FileUtils;
 import com.lube.utils.LogisticsException;
 import com.lube.utils.excel.ExcelCellStyleUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,12 +33,12 @@ import java.util.*;
 public class ReplenishServiceImp implements IReplenishService {
     private static Logger logger = Logger.getLogger(ReplenishServiceImp.class);
 
-    @Autowired
+    @Resource
     private IReplenishDao iReplenishDao;
 
     @Override
     public List<String> getPicList() throws Exception {
-        File filePath = new File(CommnoConst.BALANCE_PIC_PATH + File.separator + CommnoConst.BALANCE_PIC_CONTEXT + File.separator + CommnoConst.BALANCE_PIC_READY);
+        File filePath = new File(CommonConst.BALANCE_PIC_PATH + File.separator + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_READY);
         File[] files = filePath.listFiles();
         if(null == files) throw new LogisticsException("没有需要处理的图片！"+filePath);
 
@@ -53,8 +56,8 @@ public class ReplenishServiceImp implements IReplenishService {
 
     @Override
     public Map<String, String> importBalance() throws Exception {
-        String filePath = CommnoConst.BALANCE_PIC_PATH + File.separator + CommnoConst.BALANCE_PIC_CONTEXT + File.separator;
-        String strSrcPath = filePath + CommnoConst.BALANCE_PIC_READY + File.separator;
+        String filePath = CommonConst.BALANCE_PIC_PATH + File.separator + CommonConst.BALANCE_PIC_CONTEXT + File.separator;
+        String strSrcPath = filePath + CommonConst.BALANCE_PIC_READY + File.separator;
 
         List<String> picList = getPicList();
         TBalance balance = new TBalance();
@@ -69,12 +72,12 @@ public class ReplenishServiceImp implements IReplenishService {
                 balance.setEdit("0");
                 insertBalance(balance);
                 String srcPath = strSrcPath + picName;
-                String distPath = filePath + CommnoConst.BALANCE_PIC_COMPLETE + File.separator + picName;
+                String distPath = filePath + CommonConst.BALANCE_PIC_COMPLETE + File.separator + picName;
                 FileUtils.move(srcPath, distPath);
                 completeCount++;
             } catch (Exception e) {
                 String srcPath = strSrcPath + picName;
-                String distPath = filePath + CommnoConst.BALANCE_PIC_ERROR + File.separator + picName;
+                String distPath = filePath + CommonConst.BALANCE_PIC_ERROR + File.separator + picName;
                 FileUtils.move(srcPath, distPath);
                 errorCount++;
             }
@@ -105,7 +108,7 @@ public class ReplenishServiceImp implements IReplenishService {
             for (TBalance t : list) {
                 entityMap = new HashMap<String, String>(0);
                 Map map = BeanUtils.describe(t);
-                map.put("picPath", "/" + CommnoConst.BALANCE_PIC_CONTEXT + File.separator + CommnoConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
+                map.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
                 listMap.add(map);
             }
         } catch (Exception e) {
@@ -128,7 +131,7 @@ public class ReplenishServiceImp implements IReplenishService {
             for (TBalance t : list) {
 //                entityMap = new HashMap<String, String>(0);
                 entityMap = BeanUtils.describe(t);
-                entityMap.put("picPath", "/" + CommnoConst.BALANCE_PIC_CONTEXT + File.separator + CommnoConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
+                entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
                 listMap.add(entityMap);
             }
             Map tmp = new HashMap();
@@ -224,7 +227,7 @@ public class ReplenishServiceImp implements IReplenishService {
             if(list.size() > 0){
                 entityMap = new HashMap<String, String>(0);
                 entityMap = BeanUtils.describe(list.get(0));
-                entityMap.put("picPath", "/" + CommnoConst.BALANCE_PIC_CONTEXT + File.separator + CommnoConst.BALANCE_PIC_COMPLETE + File.separator + list.get(0).getBalanceCode() + ".jpg");
+                entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + list.get(0).getBalanceCode() + ".jpg");
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

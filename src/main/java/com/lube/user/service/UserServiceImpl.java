@@ -2,6 +2,7 @@ package com.lube.user.service;
 
 import com.lube.user.dao.IUserDao;
 import com.lube.user.entity.Operator;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Service("userService")
 public class UserServiceImpl implements IUserService {
+    private static Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     @Resource
     private IUserDao userDao;

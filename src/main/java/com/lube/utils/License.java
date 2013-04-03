@@ -3,6 +3,7 @@ package com.lube.utils;
 import com.lube.common.CommonConst;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONString;
+import org.apache.log4j.Logger;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
@@ -19,6 +20,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class License {
+    private static Logger logger = Logger.getLogger(License.class);
 
     /**
      * 检查授权是否合法
@@ -33,14 +35,23 @@ public class License {
 
             //机器名是否有效
             boolean hostNameFlag = LicenseUtils.getHostName().equalsIgnoreCase((String) jsonObject.get("hostName"));
+            if(!hostNameFlag){
+                throw new LogisticsException("机器名无效！");
+            }
 
             //是否已经超过试用日期
             Date currDate = DateUtils.parseDate(DateUtils.getCurrentDate());
             Date expireDate = DateUtils.parseDate(String.valueOf(jsonObject.get("expireDate")));
             boolean expireDateFlag = currDate.before(expireDate);
+            if(!expireDateFlag){
+                throw new LogisticsException("超出使用期限！");
+            }
 
             //校验MAC地址
             boolean MACFlag = LicenseUtils.getHostMac().equalsIgnoreCase(String.valueOf(jsonObject.get("MAC")));
+            if(!MACFlag){
+                throw new LogisticsException("Mac地址无效！");
+            }
 
             if(hostNameFlag && expireDateFlag && MACFlag){
                 licFlag = true;
@@ -50,6 +61,7 @@ public class License {
         } catch (Exception e) {
             licFlag = false;
             createHostInfo();
+            logger.error(e.getMessage(),e);
         }
         return licFlag;
     }

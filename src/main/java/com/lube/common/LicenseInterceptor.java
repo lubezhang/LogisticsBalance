@@ -18,13 +18,22 @@ import javax.servlet.http.HttpServletResponse;
 public class LicenseInterceptor implements HandlerInterceptor {
     private static Logger logger = Logger.getLogger(LicenseInterceptor.class);
 
+    private String[] paths = {"/user/verifyLogin.do"};
+
     private boolean licenseFlag;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("=============拦截请求，验证权限==============");
+//        logger.info("=============拦截请求，验证权限==============");
         boolean flag = true;
         if (CommonConst.validLicense) {
+            String servletPath = request.getServletPath();
+            logger.debug("请求地址："+servletPath);
+            for(int i = 0; i < paths.length; i++){
+                if(servletPath.equalsIgnoreCase(paths[i])){
+                    return true;
+                }
+            }
             Operator obj = (Operator) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
             if (null != obj) {
                 flag = true;
@@ -45,6 +54,7 @@ public class LicenseInterceptor implements HandlerInterceptor {
         }
         return flag;
     }
+
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {

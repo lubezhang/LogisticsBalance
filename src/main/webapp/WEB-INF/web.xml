@@ -3,7 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-    <display-name>Archetype Created Web Application</display-name>
+    <display-name>Web Application</display-name>
 
     <!-- 区分项目名称，防止默认重名 -->
     <context-param>
@@ -45,15 +45,17 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet>
-        <servlet-name>InitServlet</servlet-name>
-        <servlet-class>com.lube.common.InitServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>initServlet</servlet-name>
+        <servlet-class>com.lube.common.InitServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
 
     <welcome-file-list>
         <welcome-file>login.html</welcome-file>

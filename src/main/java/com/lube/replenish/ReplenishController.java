@@ -1,7 +1,9 @@
 package com.lube.replenish;
 
+import com.lube.common.CommonConst;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
+import com.lube.user.entity.Operator;
 import com.lube.utils.BalanceUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -118,7 +120,7 @@ public class ReplenishController {
     }
 
     @RequestMapping("updateBalanceDetail")
-    public @ResponseBody Map<String, String> updateBalanceDetail(@RequestParam Map<String, String> params) throws Exception{
+    public @ResponseBody Map<String, String> updateBalanceDetail(@RequestParam Map<String, String> params, HttpServletRequest request) throws Exception{
         Map<String ,String> map = new HashMap<String, String>(0);
         try{
             TBalance entity = new TBalance();
@@ -127,7 +129,8 @@ public class ReplenishController {
             entity.setCustomerId(params.get("customerId"));
             entity.setGatherState(params.get("gatherState"));
             entity.setMoney(Float.parseFloat(params.get("money")));
-            entity.setOperatorId(params.get("operatorId"));
+            Operator operator = (Operator) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
+            entity.setOperatorId(operator.getOperatorId());
             entity.setPayoffState(params.get("payoffState"));
             entity.setAddresseeDate(params.get("addresseeDate"));
             int rs = replenishService.updateBalance(entity);

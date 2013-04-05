@@ -1,6 +1,7 @@
 package com.lube.user.service;
 
 import com.lube.user.entity.Operator;
+import com.lube.utils.LogisticsException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,5 +17,5 @@ public interface IUserService {
      * @param operator
      * @return
      */
-    Operator verifyLogin(Operator operator);
+    Operator verifyLogin(Operator operator) throws LogisticsException;
 }

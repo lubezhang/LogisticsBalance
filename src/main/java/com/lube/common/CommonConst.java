@@ -14,7 +14,8 @@ public class CommonConst {
     public static String LICENSE_FILE_PATH = "C:/License";
     public static String LOCALHOST_INFO_FILE_PATH = "C:/LicenseInfo";
 
-    public static final String BALANCE_PIC_PATH = "D:\\Eclipse\\IdeaWorkspace\\test\\LogisticsBalance\\src\\main\\webapp\\";
+    /** 应用系统的根路径 */
+    public static String BALANCE_ROOT_PATH = "";
 
     public static final String BALANCE_PIC_CONTEXT = "balancePic";
     public static final String BALANCE_PIC_READY = "ready";

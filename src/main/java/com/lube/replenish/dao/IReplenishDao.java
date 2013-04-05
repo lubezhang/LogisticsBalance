@@ -28,6 +28,8 @@ public interface IReplenishDao {
 
     public int queryAllBalanceCount(Map<String, Object> params);
 
+    public TBalance queryBalanceDetail(String balanceId);
+
     public int updateBalance(TBalance entity);
 
     List<TBalance> queryNextBalance();

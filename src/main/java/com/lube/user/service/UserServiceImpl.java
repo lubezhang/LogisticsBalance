@@ -2,6 +2,7 @@ package com.lube.user.service;
 
 import com.lube.user.dao.IUserDao;
 import com.lube.user.entity.Operator;
+import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,16 @@ public class UserServiceImpl implements IUserService {
     private IUserDao userDao;
 
     @Override
-    public Operator verifyLogin(Operator operator) {
-        List<Operator> list = userDao.verifyLogin(operator);
-        return list.size() > 0?list.get(0):null;
+    public Operator verifyLogin(Operator operator) throws LogisticsException {
+        Operator opera = null;
+        List<Operator> list = null;
+        try{
+            list = userDao.verifyLogin(operator);
+            opera = list.size() > 0?list.get(0):null;
+        }catch (Exception e){
+            logger.error(e);
+            throw new LogisticsException(e);
+        }
+        return opera;
     }
 }

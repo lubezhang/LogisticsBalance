@@ -22,6 +22,8 @@ public class InitServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
+        CommonConst.BALANCE_ROOT_PATH = config.getServletContext().getRealPath("/") + CommonConst.BALANCE_PIC_CONTEXT;
+
         logger.info("=====检查授权是否有效====");
         if(License.verifyLicense()){
             CommonConst.validLicense = true;

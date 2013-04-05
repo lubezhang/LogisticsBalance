@@ -3,6 +3,7 @@ package com.lube.user;
 import com.lube.common.CommonConst;
 import com.lube.user.entity.Operator;
 import com.lube.user.service.IUserService;
+import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,14 +41,21 @@ public class UserController {
         logger.info("===========检查用户登录信息==========");
         logger.debug(operator);
         Map<String, String> map = new HashMap<String, String>();
-        Operator oper = userService.verifyLogin(operator);
-        if(null != oper){
-            request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
-            map.put("success","true");
-        } else {
+        Operator oper = null;
+        try {
+            oper = userService.verifyLogin(operator);
+            if(null != oper){
+                request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
+                map.put("success","true");
+            } else {
+                map.put("success","false");
+                map.put("message","登录失败，请检查用户名和密码！");
+            }
+        } catch (LogisticsException e) {
             map.put("success","false");
-            map.put("message","登录失败，请检查用户名和密码！");
+            map.put("message","登录失败，系统异常！");
         }
+
         return map;
     }
 

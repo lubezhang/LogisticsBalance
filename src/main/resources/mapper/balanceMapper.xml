@@ -164,6 +164,9 @@
             <if test="addresseeDate != null">
                 ADDRESSEE_DATE = #{addresseeDate},
             </if>
+            <if test="operatorId != null">
+                OPERATOR_ID = #{operatorId},
+            </if>
             <if test="1 == 1">
                 IS_EDIT = 1,
             </if>

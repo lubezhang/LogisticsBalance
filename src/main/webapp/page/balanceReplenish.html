@@ -20,17 +20,15 @@
     }
 
     function balanceEditWindow(){
-        var rows = $('#dg').datagrid('getSelections');
-        if(rows.length != 1){
-            $.messager.alert("操作提示","请选择一条记录！");
-            return;
-        }
-        var balanceId = rows[0].balanceId;
-//        $('#ff').form('load', '/replenishController/queryBalanceDetail.do?balanceId='+balanceId);
-//        $('#w').window('open');
+//        var rows = $('#dg').datagrid('getSelections');
+//        if(rows.length != 1){
+//            $.messager.alert("操作提示","请选择一条记录！");
+//            return;
+//        }
+//        var balanceId = rows[0].balanceId;
         $.post(
-            "/replenishController/queryBalanceDetail.do",
-            "balanceId="+balanceId,
+            "/replenishController/queryNextDetail.do",
+            "",
             function(json){
                 if(json){
                     var tmp = "";
@@ -60,7 +58,7 @@
     function editNext(){
         $.post(
             "/replenishController/queryNextDetail.do",
-            "balanceId="+balanceId,
+            "",
             function(json){
                 if(json){
                     var tmp = "";

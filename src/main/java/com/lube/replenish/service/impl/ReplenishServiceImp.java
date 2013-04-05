@@ -7,6 +7,7 @@ import com.lube.replenish.service.IReplenishService;
 import com.lube.utils.BalanceUtils;
 import com.lube.utils.FileUtils;
 import com.lube.utils.LogisticsException;
+import com.lube.utils.PropertyUtils;
 import com.lube.utils.excel.ExcelCellStyleUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -36,11 +37,35 @@ public class ReplenishServiceImp implements IReplenishService {
     @Resource
     private IReplenishDao iReplenishDao;
 
+    /**
+     * 初始化文件目录结构
+     */
+    private void initFilePath() {
+        String rootPath = CommonConst.BALANCE_ROOT_PATH;
+
+        File fileReady = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY);
+        if (!fileReady.exists()) {
+            fileReady.mkdirs();
+        }
+
+        File fileComplete = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_COMPLETE);
+        if (!fileComplete.exists()) {
+            fileComplete.mkdirs();
+        }
+
+        File fileError = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_ERROR);
+        if (!fileError.exists()) {
+            fileError.mkdirs();
+        }
+    }
+
     @Override
     public List<String> getPicList() throws Exception {
-        File filePath = new File(CommonConst.BALANCE_PIC_PATH + File.separator + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_READY);
+        initFilePath();
+        String rootPath = CommonConst.BALANCE_ROOT_PATH;
+        File filePath = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY);
         File[] files = filePath.listFiles();
-        if(null == files) throw new LogisticsException("没有需要处理的图片！"+filePath);
+        if (null == files) throw new LogisticsException("没有需要处理的图片！" + filePath);
 
         List<String> list = new ArrayList<String>(0);
         String fileName = "";
@@ -56,8 +81,8 @@ public class ReplenishServiceImp implements IReplenishService {
 
     @Override
     public Map<String, String> importBalance() throws Exception {
-        String filePath = CommonConst.BALANCE_PIC_PATH + File.separator + CommonConst.BALANCE_PIC_CONTEXT + File.separator;
-        String strSrcPath = filePath + CommonConst.BALANCE_PIC_READY + File.separator;
+        String rootPath = CommonConst.BALANCE_ROOT_PATH + File.separator;
+        String strSrcPath = rootPath + CommonConst.BALANCE_PIC_READY + File.separator;
 
         List<String> picList = getPicList();
         TBalance balance = new TBalance();
@@ -72,12 +97,12 @@ public class ReplenishServiceImp implements IReplenishService {
                 balance.setEdit("0");
                 insertBalance(balance);
                 String srcPath = strSrcPath + picName;
-                String distPath = filePath + CommonConst.BALANCE_PIC_COMPLETE + File.separator + picName;
+                String distPath = rootPath + CommonConst.BALANCE_PIC_COMPLETE + File.separator + picName;
                 FileUtils.move(srcPath, distPath);
                 completeCount++;
             } catch (Exception e) {
                 String srcPath = strSrcPath + picName;
-                String distPath = filePath + CommonConst.BALANCE_PIC_ERROR + File.separator + picName;
+                String distPath = rootPath + CommonConst.BALANCE_PIC_ERROR + File.separator + picName;
                 FileUtils.move(srcPath, distPath);
                 errorCount++;
             }
@@ -101,7 +126,7 @@ public class ReplenishServiceImp implements IReplenishService {
     @Deprecated
     public List<Map<String, String>> queryAllBalance(TBalance entity) throws Exception {
         Map<String, Object> params = BalanceUtils.boToMapForBalance(entity);
-        List<TBalance> list = iReplenishDao.queryAllBalance(entity);
+        List<TBalance> list = iReplenishDao.queryAllBalance(params);
         List<Map<String, String>> listMap = new ArrayList<Map<String, String>>(0);
         Map<String, String> entityMap = null;
         try {
@@ -119,9 +144,9 @@ public class ReplenishServiceImp implements IReplenishService {
 
     @Override
     public List<Map<String, String>> queryAllBalance(Map<String, Object> params) throws Exception {
-        int page = Integer.parseInt(params.get("page")+"");
-        int rows = Integer.parseInt(params.get("rows")+"");
-        params.put("page",(page-1)*rows);
+        int page = Integer.parseInt(params.get("page") + "");
+        int rows = Integer.parseInt(params.get("rows") + "");
+        params.put("page", (page - 1) * rows);
         params.put("rows", rows);
         List<TBalance> list = iReplenishDao.queryAllBalance(params);
         int count = iReplenishDao.queryAllBalanceCount(params);
@@ -135,7 +160,7 @@ public class ReplenishServiceImp implements IReplenishService {
                 listMap.add(entityMap);
             }
             Map tmp = new HashMap();
-            tmp.put("count",count+"");
+            tmp.put("count", count + "");
             listMap.add(tmp);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -154,11 +179,11 @@ public class ReplenishServiceImp implements IReplenishService {
         HSSFSheet sheet = workbook.createSheet("快递单对账");
 
         //标题行
-        String[] titleName = new String[]{"序号","订单编号","客户名称","收款状态","应收金额"};
+        String[] titleName = new String[]{"序号", "订单编号", "客户名称", "收款状态", "应收金额"};
         HSSFRow titleRow = sheet.createRow(0);
         HSSFCellStyle titleStyle = ExcelCellStyleUtils.titleStyle(workbook);
         HSSFCell titleCell = null;
-        for(int i = 0; i < titleName.length; i++){
+        for (int i = 0; i < titleName.length; i++) {
             titleCell = titleRow.createCell(i);
             titleCell.setCellStyle(titleStyle);
             titleCell.setCellType(HSSFCell.CELL_TYPE_STRING);
@@ -168,14 +193,14 @@ public class ReplenishServiceImp implements IReplenishService {
         List<TBalance> list = iReplenishDao.queryAllBalance(BalanceUtils.mapToBalance(params));
         HSSFCellStyle cellStyle = ExcelCellStyleUtils.nameStyle(workbook);
         HSSFRow row = null;
-        for(int j = 0; j < list.size(); j++){
-            row = sheet.createRow((short) (j+1));
+        for (int j = 0; j < list.size(); j++) {
+            row = sheet.createRow((short) (j + 1));
             TBalance tBalance = list.get(j);
 
             HSSFCell cell0 = row.createCell(0);
             cell0.setCellStyle(cellStyle);
             cell0.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-            cell0.setCellValue((j+1));
+            cell0.setCellValue((j + 1));
 
             HSSFCell cell1 = row.createCell(1);
             cell1.setCellStyle(cellStyle);
@@ -198,8 +223,8 @@ public class ReplenishServiceImp implements IReplenishService {
             cell4.setCellValue(tBalance.getMoney());
         }
 
-        row = sheet.createRow((short) (list.size()+1));
-        for(int k = 1; k < list.size()-2; k++){
+        row = sheet.createRow((short) (list.size() + 1));
+        for (int k = 1; k < list.size() - 2; k++) {
             HSSFCell cell = row.createCell(k);
             cell.setCellStyle(cellStyle);
             cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
@@ -215,7 +240,7 @@ public class ReplenishServiceImp implements IReplenishService {
         cell.setCellStyle(cellStyle);
         cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
         Map<String, Object> money2 = iReplenishDao.notPayMoney(BalanceUtils.mapToBalance(params));
-        cell.setCellValue(null != money2?money2.get("totalMoney")+"":"0");
+        cell.setCellValue(null != money2 ? money2.get("totalMoney") + "" : "0");
         workbook.write(output);
     }
 
@@ -224,7 +249,7 @@ public class ReplenishServiceImp implements IReplenishService {
         List<TBalance> list = iReplenishDao.queryNextBalance();
         Map<String, String> entityMap = null;
         try {
-            if(list.size() > 0){
+            if (list.size() > 0) {
                 entityMap = new HashMap<String, String>(0);
                 entityMap = BeanUtils.describe(list.get(0));
                 entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + list.get(0).getBalanceCode() + ".jpg");
@@ -241,8 +266,8 @@ public class ReplenishServiceImp implements IReplenishService {
         Map<String, Object> money2 = iReplenishDao.notPayMoney(balance);
 
         Map<String, String> map = new HashMap<String, String>(0);
-        map.put("payMoney",null != money1?money1.get("totalMoney")+"":"0");
-        map.put("notPayMoney",null != money2?money2.get("totalMoney")+"":"0");
+        map.put("payMoney", null != money1 ? money1.get("totalMoney") + "" : "0");
+        map.put("notPayMoney", null != money2 ? money2.get("totalMoney") + "" : "0");
         return map;
     }
 }

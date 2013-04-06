@@ -53,7 +53,7 @@
     </mvc:interceptors>
 
     <!-- 打开 AOP 功能 -->
-    <!--<aop:aspectj-autoproxy/>-->
+    <aop:aspectj-autoproxy/>
     <!-- 激活annotation功能 -->
     <!--<context:annotation-config />-->
     <!-- 激活annotation功能 -->

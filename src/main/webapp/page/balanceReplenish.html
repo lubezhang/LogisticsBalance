@@ -1,182 +1,118 @@
-<script type="text/javascript" src="/script/jquery/jquery.easyui.min.js"></script>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>快递单维护</title>
+    <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../lib/jquery/jquery-1.5.2.min.js"></script>
+    <script type="text/javascript" src="../lib/ligerUI/js/core/base.js"></script>
+    <script type="text/javascript" src="../lib/ligerUI/js/ligerui.all.js"></script>
+    <script type="text/javascript" src="../lib/jquery-validation/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery-validation/jquery.metadata.js"></script>
+    <script type="text/javascript" src="../lib/jquery-validation/messages_cn.js"></script>
+    <script type="text/javascript" src="../resource/script/balanceReplenish.js"></script>
+    <style type="text/css">
+        .l-table-edit {}
+        .l-table-edit-td{ padding:4px;}
+        .l-button-submit,.l-button-test{width:80px; float:left; margin-left:10px; padding-bottom:2px;}
+        .l-verify-tip{ left:230px; top:120px;}
+    </style>
+</head>
+<body style="padding:0px; overflow:hidden;">
+
+<div class="l-panel-search">
+    <div class="l-panel-search-item">快递单号：</div>
+    <div class="l-panel-search-item">
+        <input type="text" id="sbalanceCode" value=""/>
+    </div>
+    <div class="l-panel-search-item">
+        <div id="searchbtn" style="width:40px;">搜索</div>
+    </div>
+</div>
+
+<div id="maingrid"></div>
+
+<!--/////////////////////////////////////////////////////////////////////////-->
+<!--快递单详情页面-->
+<div id="balanceDetail">
+    <form name="form1" method="post" action="/replenishController/updateBalanceDetail.do" id="form1">
+        <input type="hidden" name="balanceId" id="balanceId" value=""/>
+        <div>
+        </div>
+        <table cellpadding="0" cellspacing="0" class="l-table-edit" >
+            <tr>
+                <td align="right" class="l-table-edit-td">快递单号:</td>
+                <td align="left" class="l-table-edit-td"><input name="balanceCode" type="text" id="balanceCode" ltype="text" validate="{required:true,minlength:3,maxlength:64}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">客户名称:</td>
+                <td align="left" class="l-table-edit-td"><input name="customerId" type="text" id="customerId" ltype="text" validate="{required:true,minlength:3,maxlength:100}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">收款状态:</td>
+                <td align="left" class="l-table-edit-td">
+                    <select name="gatherState" id="gatherState" ltype="select">
+                        <option value="1">现结</option>
+                        <option value="2">月结</option>
+                        <option value="3">对付</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">应收金额:</td>
+                <td align="left" class="l-table-edit-td">
+                    <input name="money" type="text" id="money" ltype='spinner' ligerui="{type:'float'}" value="20" class="required" validate="{digits:true,min:1,max:1000000}" />
+                </td><td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">结算状态:</td>
+                <td align="left" class="l-table-edit-td">
+                    <select name="payoffState" id="payoffState" ltype="select">
+                        <option value="1">已结</option>
+                        <option value="2">未结</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">收件日期:</td>
+                <td align="left" class="l-table-edit-td">
+                    <input name="addresseeDate" type="text" id="addresseeDate" ltype="date" validate="{required:true}" />
+                </td><td align="left"></td>
+            </tr>
+        </table>
+        <br />
+        <input type="submit" value="提交" id="Button1" class="l-button l-button-submit" />
+        <input type="button" value="重置" class="l-button l-button-test"/>
+    </form>
+</div>
+<!--/////////////////////////////////////////////////////////////////////////-->
 <script type="text/javascript">
-    function loadBalanceData(){
-        $('#dg').datagrid({
-            url:'/replenishController/queryBalanceList.do',
-            columns:[[
-                {field:'balanceId',title:'快递单编号',checkbox:true,width:100},
-                {field:'balanceCode',title:'快递单号',width:60,align:"center"},
-                {field:'customerId',title:'客户名称',width:160,align:"center"},
-                {field:'money',title:'金额',width:40,align:"center"},
-                {field:'gatherState',title:'收款状态',width:20,align:"center"},
-                {field:'payoffState',title:'结算状态',width:20,align:"center"}
-            ]],
-            queryParams: {
-                balanceCode: $("#balanceCode1").val(),
-                payoffState: $('#payoffState1').combobox('getValue'),
-                gatherState: $('#gatherState1').combobox('getValue')
-            }
-        });
-    }
-
-    function balanceEditWindow(){
-//        var rows = $('#dg').datagrid('getSelections');
-//        if(rows.length != 1){
-//            $.messager.alert("操作提示","请选择一条记录！");
-//            return;
-//        }
-//        var balanceId = rows[0].balanceId;
-        $.post(
-            "/replenishController/queryNextDetail.do",
-            "",
-            function(json){
-                if(json){
-                    var tmp = "";
-                    for(var key in json){
-                        $("#"+key).val(json[key]);
-                    }
-                    $("#balancePic").attr("src",json.picPath);
-                    debugger;
-                    var today =  new Date();
-                    var y = today.getFullYear();
-                    var m = today.getMonth()+1;
-                    var d = today.getDate();
-                    var strDate = y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
-                    $('#addresseeDate').datebox('setValue', strDate);
-                } else {
-                    alert("error");
-                }
-                //alert(2);
-
-            },
-            "json"
-        );
-        $('#w').window('open');
-
-    }
-
-    function editNext(){
-        $.post(
-            "/replenishController/queryNextDetail.do",
-            "",
-            function(json){
-                if(json){
-                    var tmp = "";
-                    for(var key in json){
-                        $("#"+key).val(json[key]);
-                    }
-                    $("#balancePic").attr("src",json.picPath);
-                } else {
-                    alert("没有需要补录的快递单！");
-                }
-            },
-            "json"
-        );
-    }
-
-    function submitBalance(){
-        $.post(
-            "/replenishController/updateBalanceDetail.do?random="+new Date().getTime(),
-            $("#ff").serialize(),
-            function(json){
-                if(json.successful){
-                    $.messager.alert("处理信息","修改成功","info",function(){
-                        //$('#w').window('close');
-                        editNext();
-                    });
-                } else {
-                    $.messager.alert("处理信息","修改失败"+json.successful,"error",function(){
-//                        $('#w').window('close');
-                    });
-                }
-            },
-            "json"
-        );
-    }
-
-    loadBalanceData();
+    //工具条事件
+    //    function toolbarBtnItemClick(item) {
+    //        switch (item.id) {
+    //            case "add":
+    //                top.f_addTab(null, '增加员工信息', 'BaseManage/EmployeesDetail.aspx');
+    //                break;
+    //            case "view":
+    //                var selected = grid.getSelected();
+    //                if (!selected) { LG.tip('请选择行!'); return }
+    //                top.f_addTab(null, '查看员工信息', 'BaseManage/EmployeesDetail.aspx?IsView=1&ID=' + selected.EmployeeID);
+    //                break;
+    //            case "modify":
+    //                var selected = grid.getSelected();
+    //                if (!selected) { LG.tip('请选择行!'); return }
+    //                top.f_addTab(null, '修改员工信息', 'BaseManage/EmployeesDetail.aspx?ID=' + selected.EmployeeID);
+    //                break;
+    //            case "delete":
+    //                jQuery.ligerDialog.confirm('确定删除吗?', function (confirm) {
+    //                    if (confirm)
+    //                        f_delete();
+    //                });
+    //                break;
+    //        }
+    //    }
 </script>
-<table id="dg" class="easyui-datagrid" title="快递单补录" width="100%" height="300px"
-       rownumbers="true" pagination="true"
-       data-options="toolbar:'#tb',border:false,fit:true,fitColumns:true">
-</table>
-<div id="tb" style="padding:5px;height:auto">
-    <div style="margin-bottom:5px">
-        <!--<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>-->
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="importBalance()">导入</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="balanceEditWindow()">补录</a>
-        <!--<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>-->
-        <!--<a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>-->
-        <!--<a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>-->
-    </div>
-    <div>
-        快递单号：<input id="balanceCode1" class="easyui-validatebox" style="width:180px" value="" />
-        收款方式：<select id="gatherState1" class="easyui-combobox">
-                    <option value="" selected>请选择</option>
-                    <option value="1">现结</option>
-                    <option value="2">月结</option>
-                    <option value="3">对付</option>
-                </select>
-        结算状态：<select id="payoffState1" class="easyui-combobox">
-                    <option value="" selected>请选择</option>
-                    <option value="1">已结</option>
-                    <option value="2">未结</option>
-                 </select>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="loadBalanceData()">查询</a>
-    </div>
-</div>
-
-<div id="w" class="easyui-window" title="快递单信息" data-options="modal:true,shadow:true,closed:true,iconCls:'icon-save'" style="width:700px;height:600px;padding:10px;">
-
-    <div style="float: left"><img id="balancePic" src="" border="0" /></div>
-    <div style="padding:10px 0 10px 10px;float: left">
-        <form id="ff" method="post" >
-            <input type="hidden" id="balanceId" name="balanceId" value="" />
-            <table>
-                <tr>
-                    <td>快递单号:</td>
-                    <td><input class="easyui-validatebox" type="text" id="balanceCode" name="balanceCode" data-options="required:true,enable:false" /></td>
-                </tr>
-                <tr>
-                    <td>客户名称:</td>
-                    <td><input class="easyui-validatebox" type="text" id="customerId" name="customerId" data-options="required:true" /></td>
-                </tr>
-                <tr>
-                    <td>收款状态:</td>
-                    <td>
-                        <select class="easyui-combobox" id="gatherState" name="gatherState" data-options="required:true">
-                            <option value="1">现结</option>
-                            <option value="2">月结</option>
-                            <option value="3">对付</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>应收金额:</td>
-                    <td><input type="text" class="easyui-numberbox" id="money" name="money" value="0" data-options="min:0,precision:2" required="required" /></td>
-                </tr>
-                <tr>
-                    <td>结算状态:</td>
-                    <td>
-                        <select class="easyui-combobox" id="payoffState" name="payoffState" data-options="required:true">
-                            <option value="1">已结</option>
-                            <option value="2">未结</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>收件日期:</td>
-                    <td>
-                        <input type="text" class="easyui-datebox" id="addresseeDate" name="addresseeDate" required="required"  data-options="formatter:myformatter,parser:myparser"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitBalance()">提交</a>
-                        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#ff').form('clear')">重置</a>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-</div>
+</body>
+</html>

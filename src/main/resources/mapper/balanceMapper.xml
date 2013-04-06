@@ -28,7 +28,7 @@
 
     <select id="queryAllBalance" parameterType="Map" resultMap="balanceMap">
         select
-          BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,ADDRESSEE_DATE
+          BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,ADDRESSEE_DATE,OPERATOR_DATE
         from
             t_balance t1,
             (SELECT * FROM t_dict where dict_type = 1) t2,
@@ -56,7 +56,7 @@
         <if test=" addrDateEnd != null and addrDateEnd != ''">
             <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
         </if>
-        order by t1.ADDRESSEE_DATE limit #{page},#{rows}
+        order by t1.ADDRESSEE_DATE desc limit #{page},#{pagesize}
     </select>
 
     <select id="queryAllBalanceCount" parameterType="Map" resultType="Integer">

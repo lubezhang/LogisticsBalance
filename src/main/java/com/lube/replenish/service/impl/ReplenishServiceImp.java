@@ -145,9 +145,9 @@ public class ReplenishServiceImp implements IReplenishService {
     @Override
     public List<Map<String, String>> queryAllBalance(Map<String, Object> params) throws Exception {
         int page = Integer.parseInt(params.get("page") + "");
-        int rows = Integer.parseInt(params.get("rows") + "");
-        params.put("page", (page - 1) * rows);
-        params.put("rows", rows);
+        int pagesize = Integer.parseInt(params.get("pagesize") + "");
+        params.put("page", (page - 1) * pagesize);
+        params.put("pagesize", pagesize);
         List<TBalance> list = iReplenishDao.queryAllBalance(params);
         int count = iReplenishDao.queryAllBalanceCount(params);
         List<Map<String, String>> listMap = new ArrayList<Map<String, String>>(0);

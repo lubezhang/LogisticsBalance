@@ -81,8 +81,8 @@ public class ReplenishController {
                 count = list.get(list.size()-1).get("count");
                 list.remove(list.size()-1);
             }
-            resBody.put("total", count);
-            resBody.put("rows", list);
+            resBody.put("Total", count);
+            resBody.put("Rows", list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

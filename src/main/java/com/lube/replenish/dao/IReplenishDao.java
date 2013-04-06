@@ -28,12 +28,12 @@ public interface IReplenishDao {
 
     public int queryAllBalanceCount(Map<String, Object> params);
 
-    public TBalance queryBalanceDetail(String balanceId);
+    public TBalance queryBalanceDetail(TBalance entity);
 
     public int updateBalance(TBalance entity);
 
-    List<TBalance> queryNextBalance();
+    public TBalance queryNextBalance();
 
-    Map<String, Object> payMoney(TBalance entity);
-    Map<String, Object> notPayMoney(TBalance entity);
+    public Map<String, Object> payMoney(TBalance entity);
+    public Map<String, Object> notPayMoney(TBalance entity);
 }

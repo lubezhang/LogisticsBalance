@@ -130,7 +130,7 @@ function editNext(){
                 for(var key in json){
                     $("#"+key).val(json[key]);
                 }
-//                $("#balancePic").attr("src",json.picPath);
+                $("#balancePic").attr("src",json.picPath);
                 if(null == win){
                     win = $.ligerDialog.open({title:"快递单详情",height: 200,showMax:true, isResize: true, target:$("#balanceDetail") });
                     win.max();

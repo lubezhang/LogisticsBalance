@@ -35,6 +35,8 @@
 <!--/////////////////////////////////////////////////////////////////////////-->
 <!--快递单详情页面-->
 <div id="balanceDetail">
+    <div style="float: left"><img id="balancePic" src="" border="0" width="750" height="550" /></div>
+    <div style="padding:10px 0 10px 10px;float: left">
     <form name="form1" method="post" action="/replenishController/updateBalanceDetail.do" id="form1">
         <input type="hidden" name="balanceId" id="balanceId" value=""/>
         <div>
@@ -63,7 +65,7 @@
             <tr>
                 <td align="right" class="l-table-edit-td">应收金额:</td>
                 <td align="left" class="l-table-edit-td">
-                    <input name="money" type="text" id="money" ltype='spinner' ligerui="{type:'float'}" value="20" class="required" validate="{digits:true,min:1,max:1000000}" />
+                    <input name="money" type="text" id="money" ltype='spinner' ligerui="{type:'int'}" value="20" class="required" validate="{digits:true,min:1,max:1000000}" />
                 </td><td align="left"></td>
             </tr>
             <tr>
@@ -86,6 +88,7 @@
         <input type="submit" value="提交" id="Button1" class="l-button l-button-submit" />
         <input type="button" value="重置" class="l-button l-button-test"/>
     </form>
+    </div>
 </div>
 <!--/////////////////////////////////////////////////////////////////////////-->
 <script type="text/javascript">

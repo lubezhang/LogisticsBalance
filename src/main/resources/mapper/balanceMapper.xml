@@ -64,30 +64,31 @@
           count(BALANCE_ID)
         from
           t_balance t1
-        where
-          <![CDATA[1 < 2]]>
-        <if test=" balanceId != null and balanceId != ''">
-            and BALANCE_ID = #{balanceId}
-        </if>
-        <if test=" balanceCode != null and balanceCode != ''">
-            and BALANCE_CODE = #{balanceCode}
-        </if>
-        <if test=" customerId != null and customerId != ''">
-            and CUSTOMER_ID like #{customerId} '%'
-        </if>
-        <if test=" payoffState != null and payoffState != ''">
-            and PAYOFF_STATE = #{payoffState}
-        </if>
-        <if test=" gatherState != null and gatherState != ''">
-            and GATHER_STATE = #{gatherState}
-        </if>
-        <if test=" addrDateBegin != null and addrDateBegin != ''">
-            and ADDRESSEE_DATE >= #{addrDateBegin}
-        </if>
-        <if test=" addrDateEnd != null and addrDateEnd != ''">
-            <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
-        </if>
-
+        <!--where-->
+          <!--<![CDATA[1 < 2]]>-->
+        <where>
+            <if test=" balanceId != null and balanceId != ''">
+                and BALANCE_ID = #{balanceId}
+            </if>
+            <if test=" balanceCode != null and balanceCode != ''">
+                and BALANCE_CODE = #{balanceCode}
+            </if>
+            <if test=" customerId != null and customerId != ''">
+                and CUSTOMER_ID like #{customerId} '%'
+            </if>
+            <if test=" payoffState != null and payoffState != ''">
+                and PAYOFF_STATE = #{payoffState}
+            </if>
+            <if test=" gatherState != null and gatherState != ''">
+                and GATHER_STATE = #{gatherState}
+            </if>
+            <if test=" addrDateBegin != null and addrDateBegin != ''">
+                and ADDRESSEE_DATE >= #{addrDateBegin}
+            </if>
+            <if test=" addrDateEnd != null and addrDateEnd != ''">
+                <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
+            </if>
+        </where>
     </select>
 
     <select id="payMoney" parameterType="tBalance" resultType="java.util.HashMap">
@@ -136,13 +137,26 @@
         group by t.PAYOFF_STATE  order by t.PAYOFF_STATE
     </select>
 
-    <select id="queryNextBalance" parameterType="tBalance" resultMap="balanceMap">
+    <select id="queryNextBalance" parameterType="Map" resultMap="balanceMap">
         select
             BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE, GATHER_STATE,MONEY, PAYOFF_STATE,ADDRESSEE_DATE
         from
             t_balance t1
         where
             t1.is_edit = 0
+        limit 1
+    </select>
+
+    <select id="queryBalanceDetail" parameterType="tBalance" resultMap="balanceMap">
+        select
+            BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE, GATHER_STATE,MONEY, PAYOFF_STATE,ADDRESSEE_DATE
+        from
+            t_balance t1
+        <where>
+            <if test=" balanceCode != null and balanceCode != ''">
+                BALANCE_CODE = #{balanceCode}
+            </if>
+        </where>
         limit 1
     </select>
 

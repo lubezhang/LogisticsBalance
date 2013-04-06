@@ -7,7 +7,6 @@ import com.lube.replenish.service.IReplenishService;
 import com.lube.utils.BalanceUtils;
 import com.lube.utils.FileUtils;
 import com.lube.utils.LogisticsException;
-import com.lube.utils.PropertyUtils;
 import com.lube.utils.excel.ExcelCellStyleUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -246,14 +245,12 @@ public class ReplenishServiceImp implements IReplenishService {
 
     @Override
     public Map<String, String> queryNextBalance() {
-        List<TBalance> list = iReplenishDao.queryNextBalance();
+        TBalance bean = iReplenishDao.queryNextBalance();
         Map<String, String> entityMap = null;
         try {
-            if (list.size() > 0) {
-                entityMap = new HashMap<String, String>(0);
-                entityMap = BeanUtils.describe(list.get(0));
-                entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + list.get(0).getBalanceCode() + ".jpg");
-            }
+            entityMap = new HashMap<String, String>(0);
+            entityMap = BeanUtils.describe(bean);
+            entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + bean.getBalanceCode() + ".jpg");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -269,5 +266,18 @@ public class ReplenishServiceImp implements IReplenishService {
         map.put("payMoney", null != money1 ? money1.get("totalMoney") + "" : "0");
         map.put("notPayMoney", null != money2 ? money2.get("totalMoney") + "" : "0");
         return map;
+    }
+
+    @Override
+    public Map<String, Object> queryBalanceDetail(TBalance entity) {
+        TBalance obj = iReplenishDao.queryBalanceDetail(entity);
+        Map<String, Object> entityMap = null;
+        try {
+            entityMap = BeanUtils.describe(obj);
+            entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + obj.getBalanceCode() + ".jpg");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return entityMap;
     }
 }

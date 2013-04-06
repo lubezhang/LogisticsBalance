@@ -61,4 +61,6 @@ public interface IReplenishService {
     Map<String, String> queryNextBalance();
 
     Map<String, String> getTotalMoney(TBalance balance);
+
+    Map<String, Object> queryBalanceDetail(TBalance entity);
 }

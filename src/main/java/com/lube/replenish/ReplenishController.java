@@ -91,18 +91,18 @@ public class ReplenishController {
     }
 
     @RequestMapping("queryBalanceDetail")
-    public @ResponseBody Map<String, String> queryBalanceDetail(@RequestParam Map<String, String> params){
+    public @ResponseBody Map<String, Object> queryBalanceDetail(@RequestParam Map<String, String> params){
         TBalance entity = new TBalance();
         entity.setBalanceId(params.get("balanceId"));
         entity.setBalanceCode(params.get("balanceCode"));
 
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>(0);
+        Map<String, Object> map = null;
         try {
-            list = replenishService.queryAllBalance(entity);
+            map = replenishService.queryBalanceDetail(entity);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        return list.get(0);
+        return map;
     }
 
     @RequestMapping("queryNextDetail")

@@ -189,7 +189,7 @@ public class ReplenishServiceImp implements IReplenishService {
             titleCell.setCellValue(titleName[i]);
         }
 
-        List<TBalance> list = iReplenishDao.queryAllBalance(BalanceUtils.mapToBalance(params));
+        List<TBalance> list = iReplenishDao.queryAllBalance(new HashMap<String, Object>(params));
         HSSFCellStyle cellStyle = ExcelCellStyleUtils.nameStyle(workbook);
         HSSFRow row = null;
         for (int j = 0; j < list.size(); j++) {

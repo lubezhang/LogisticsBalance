@@ -72,21 +72,29 @@
             /* 顶部 */
         .l-topmenu{ margin:0; padding:0; height:31px; line-height:31px; background:url('/lib/images/top.jpg') repeat-x bottom;  position:relative; border-top:1px solid #1D438B;  }
         .l-topmenu-logo{ color:#E7E7E7; padding-left:35px; line-height:26px;background:url('/lib/images/topicon.gif') no-repeat 10px 5px;}
-        .l-topmenu-welcome{  position:absolute; height:24px; line-height:24px;  right:30px; top:2px;color:#070A0C;}
+        .l-topmenu-welcome{  position:absolute; height:24px; right:30px; top:0px;color:#E7E7E7;}
         .l-topmenu-welcome a{ color:#E7E7E7; text-decoration:underline}
+        .l-topmenu-username{ color:#070A0C; font-weight:bold;}
 
     </style>
 </head>
 <body style="padding:0px;background:#EAEEF5;">
 <div id="pageloading"></div>
 <div id="topmenu" class="l-topmenu">
-    <div class="l-topmenu-logo">物流对账管理平台</div>
-    <div class="l-topmenu-welcome">
+    <div class="l-topmenu-logo"><h3>物流对账管理系统</h3></div>
+    <!--<div class="l-topmenu-welcome">-->
         <!--<a href="index.aspx" class="l-link2">服务器版本</a>-->
         <!--<span class="space">|</span>-->
         <!--<a href="https://me.alipay.com/daomi" class="l-link2" target="_blank">捐赠</a>-->
         <!--<span class="space">|</span>-->
         <!--<a href="http://bbs.ligerui.com" class="l-link2" target="_blank">论坛</a>-->
+    <!--</div>-->
+
+    <div class="l-topmenu-welcome">
+        <span class="l-topmenu-username"></span>欢迎您  &nbsp;
+        [<a href="javascript:void(0)">修改密码</a>] &nbsp;
+        [<a href="javascript:void(0)">切换用户</a>]
+        [<a href="javascript:void(0)">退出</a>]
     </div>
 </div>
 <div id="layout1" style="width:99.2%; margin:0 auto; margin-top:4px; ">
@@ -97,6 +105,7 @@
         <div title="快递单维护">
             <div style=" height:7px;"></div>
             <a class="l-link" href="javascript:f_addTab('11','快递单补录','/page/balanceReplenish.html')">快递单补录</a>
+            <a class="l-link" href="javascript:f_addTab('12','快递对账单','/page/balanceExport.html')">快递对账单</a>
         </div>
         <div title="快递单查询">
             <div style=" height:7px;"></div>

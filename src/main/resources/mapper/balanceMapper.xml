@@ -56,7 +56,10 @@
         <if test=" addrDateEnd != null and addrDateEnd != ''">
             <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
         </if>
-        order by t1.ADDRESSEE_DATE desc limit #{page},#{pagesize}
+        order by t1.ADDRESSEE_DATE desc
+        <if test=" page != null and page != ''">
+            limit #{page},#{pagesize}
+        </if>
     </select>
 
     <select id="queryAllBalanceCount" parameterType="Map" resultType="Integer">

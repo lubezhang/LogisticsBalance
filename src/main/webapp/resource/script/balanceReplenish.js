@@ -16,7 +16,7 @@ $(function(){
     //初始化快递单列表
     $("#maingrid").ligerGrid({
         columns: [
-            { display: "主键", name: "balanceId", width: 120 },
+//            { display: "主键", name: "balanceId", width: 120 },
             { display: "快递单号", name: "balanceCode", width: 120 },
             { display: "客户", name: "customerId", width: 320 },
             { display: "修改日期", name: "operatorDate", width: 120 },
@@ -31,9 +31,10 @@ $(function(){
         ]},
         url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
-        width: '98%', height: '100%',
-        heightDiff:-10, checkbox: true,
-        alternatingRow:true,rownumbers:true
+        width: '100%', height: '100%',
+        heightDiff:0, checkbox: true,
+        alternatingRow:true,rownumbers:true,
+        selectRowButtonOnly:true
     });
     gridManager = $("#maingrid").ligerGetGridManager();
     $("#pageloading").hide();

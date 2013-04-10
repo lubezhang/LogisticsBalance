@@ -1,18 +1,21 @@
 package com.lube.user;
 
 import com.lube.common.CommonConst;
-import com.lube.user.entity.Operator;
+import com.lube.common.LigerUtils;
+import com.lube.user.entity.User;
 import com.lube.user.service.IUserService;
 import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,19 +34,24 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @RequestMapping("login")
+    public String login() throws Exception {
+        return "index";
+    }
+
     /**
      *
      * 用户登录验证
      * @return
      */
     @RequestMapping("verifyLogin")
-    public @ResponseBody Map<String, String> verifyLogin(@ModelAttribute Operator operator, HttpServletRequest request){
+    public @ResponseBody Map<String, String> verifyLogin(@ModelAttribute User user, HttpServletRequest request){
         logger.info("===========检查用户登录信息==========");
-        logger.debug(operator);
+        logger.debug(user);
         Map<String, String> map = new HashMap<String, String>();
-        Operator oper = null;
+        User oper = null;
         try {
-            oper = userService.verifyLogin(operator);
+            oper = userService.verifyLogin(user);
             if(null != oper){
                 request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
                 map.put("success","true");
@@ -59,8 +67,17 @@ public class UserController {
         return map;
     }
 
-    @RequestMapping("login")
-    public String login() throws Exception {
-        return "index";
+    @RequestMapping("queryUserList")
+    public @ResponseBody Map<String, Object> queryUserList(@RequestParam Map<String, String> params){
+        Map<String, Object> resBody = null;
+        try {
+            List<User> list = userService.queryAllUser(params);
+            String count = String.valueOf(userService.queryAllUserCount(params));
+            resBody = LigerUtils.resultMap(list, count);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return resBody;
     }
+
 }

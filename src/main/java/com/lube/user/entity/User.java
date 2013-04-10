@@ -7,7 +7,7 @@ package com.lube.user.entity;
  * Time: 下午5:03
  * To change this template use File | Settings | File Templates.
  */
-public class Operator {
+public class User {
     private String operatorId;
     private String username;
     private String password;
@@ -56,7 +56,7 @@ public class Operator {
 
     @Override
     public String toString() {
-        return "Operator{" +
+        return "User{" +
                 "operatorId='" + operatorId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

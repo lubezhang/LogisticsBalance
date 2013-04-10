@@ -1,6 +1,6 @@
 package com.lube.common;
 
-import com.lube.user.entity.Operator;
+import com.lube.user.entity.User;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,7 +34,7 @@ public class LicenseInterceptor implements HandlerInterceptor {
                     return true;
                 }
             }
-            Operator obj = (Operator) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
+            User obj = (User) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
             if (null != obj) {
                 flag = true;
             } else {

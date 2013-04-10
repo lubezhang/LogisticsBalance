@@ -1,8 +1,9 @@
 package com.lube.user.dao;
 
-import com.lube.user.entity.Operator;
+import com.lube.user.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public interface IUserDao {
 
-    List<Operator> verifyLogin(Operator operator);
-
+    User verifyLogin(User user);
+    List<User> queryAllUser(Map<String, Object> params);
+    int queryAllUserCount(Map<String, Object> params);
 }

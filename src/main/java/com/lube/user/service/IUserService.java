@@ -1,7 +1,10 @@
 package com.lube.user.service;
 
-import com.lube.user.entity.Operator;
+import com.lube.user.entity.User;
 import com.lube.utils.LogisticsException;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +17,11 @@ public interface IUserService {
 
     /**
      * 校验用户登录信息的有效性
-     * @param operator
+     * @param user
      * @return
      */
-    Operator verifyLogin(Operator operator) throws LogisticsException;
+    User verifyLogin(User user) throws LogisticsException;
+
+    List<User> queryAllUser(Map<String,String> params);
+    int queryAllUserCount(Map<String, String> params);
 }

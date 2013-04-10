@@ -15,7 +15,7 @@
         <result property="addrDateEnd" column="ADDRESSEE_DATE"/>
         <result property="isEdit" column="IS_EDIT"/>
         <result property="balanceUser" column="BALANCE_USER"/>
-        <result property="operator" column="OPERATOR"/>
+        <result property="user" column="OPERATOR"/>
         <result property="operatorDate" column="OPERATOR_DATE"/>
     </resultMap>
 
@@ -23,7 +23,7 @@
         insert into t_balance
           (BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE,GATHER_STATE,MONEY,PAYOFF_STATE,ADDRESSEE_DATE,IS_EDIT,BALANCE_USER,OPERATOR,OPERATOR_DATE)
         values
-          (#{balanceId},#{customerId},#{operatorId},#{balanceCode},#{gatherState},#{money},#{payoffState},#{addresseeDate},#{isEdit},#{balanceUser},#{operator},now())
+          (#{balanceId},#{customerId},#{operatorId},#{balanceCode},#{gatherState},#{money},#{payoffState},#{addresseeDate},#{isEdit},#{balanceUser},#{user},now())
     </insert>
 
     <select id="queryAllBalance" parameterType="tBalance" resultMap="balanceMap">

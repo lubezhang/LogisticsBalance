@@ -1,9 +1,10 @@
 package com.lube.replenish;
 
 import com.lube.common.CommonConst;
+import com.lube.common.LigerUtils;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
-import com.lube.user.entity.Operator;
+import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +73,7 @@ public class ReplenishController {
 //        entity.setAddrDateEnd(params.get("addrDateEnd"));
 
         List<Map<String, String>> list = null;
-        Map<String, Object> resBody = new HashMap<String, Object>(0);
+        Map<String, Object> resBody = null;
         try {
             list = replenishService.queryAllBalance(new HashMap<String, Object>(params));
             String count = "";
@@ -81,8 +81,7 @@ public class ReplenishController {
                 count = list.get(list.size()-1).get("count");
                 list.remove(list.size()-1);
             }
-            resBody.put("Total", count);
-            resBody.put("Rows", list);
+            resBody = LigerUtils.resultMap(list, count);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -129,8 +128,8 @@ public class ReplenishController {
             entity.setCustomerId(params.get("customerId"));
             entity.setGatherState(params.get("gatherState"));
             entity.setMoney(Float.parseFloat(params.get("money")));
-            Operator operator = (Operator) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
-            entity.setOperatorId(operator.getOperatorId());
+            User user = (User) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
+            entity.setOperatorId(user.getOperatorId());
             entity.setPayoffState(params.get("payoffState"));
             entity.setAddresseeDate(params.get("addresseeDate"));
             int rs = replenishService.updateBalance(entity);

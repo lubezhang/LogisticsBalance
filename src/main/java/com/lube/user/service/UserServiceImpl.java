@@ -1,13 +1,15 @@
 package com.lube.user.service;
 
 import com.lube.user.dao.IUserDao;
-import com.lube.user.entity.Operator;
+import com.lube.user.entity.User;
 import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,16 +26,37 @@ public class UserServiceImpl implements IUserService {
     private IUserDao userDao;
 
     @Override
-    public Operator verifyLogin(Operator operator) throws LogisticsException {
-        Operator opera = null;
-        List<Operator> list = null;
+    public User verifyLogin(User user) throws LogisticsException {
+        User rsUser;
         try{
-            list = userDao.verifyLogin(operator);
-            opera = list.size() > 0?list.get(0):null;
+            rsUser = userDao.verifyLogin(user);
+//            user = list.size() > 0?list.get(0):null;
         }catch (Exception e){
             logger.error(e);
             throw new LogisticsException(e);
         }
-        return opera;
+        return rsUser;
     }
+
+    @Override
+    public List<User> queryAllUser(Map<String, String> params) {
+        Map<String,Object> par = new HashMap<String, Object>(params);
+        int page = Integer.parseInt(params.get("page"));
+        int pagesize = Integer.parseInt(params.get("pagesize"));
+        par.put("page", (page - 1) * pagesize);
+        par.put("pagesize", pagesize);
+        return userDao.queryAllUser(par);
+    }
+
+    @Override
+    public int queryAllUserCount(Map<String, String> params) {
+        Map<String,Object> par = new HashMap<String, Object>(params);
+        int page = Integer.parseInt(params.get("page"));
+        int pagesize = Integer.parseInt(params.get("pagesize"));
+        par.put("page", (page - 1) * pagesize);
+        par.put("pagesize", pagesize);
+        return userDao.queryAllUserCount(par);
+    }
+
+
 }

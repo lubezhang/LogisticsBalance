@@ -1,7 +1,3 @@
-//列表结构
-var alert = function (content, title){
-    $.ligerDialog.alert(content, title);
-};
 var gridManager = null;
 $(function(){
     $("#searchbtn").ligerButton({ click: function (){
@@ -28,7 +24,9 @@ $(function(){
         toolbar: { items: [
             { id:"import", text: '导入快递单', click: itemclick, icon: 'add' },
             { line: true },
-            { id:"update", text: '补录', click: itemclick, icon: 'modify' }
+            { id:"edit", text: '补录', click: itemclick, icon: 'edit' },
+            { line: true },
+            { id:"delete", text: '删除', click: itemclick, icon: 'delete' }
         ]},
         url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
@@ -93,8 +91,11 @@ function itemclick(item){
         case "import":
             importBalance();
             break;
-        case "update":
+        case "edit":
             editNext();
+            break;
+        case "delete":
+            deleteBalance();
             break;
         default:
             break;
@@ -139,6 +140,37 @@ function editNext(){
                 }
             } else {
                 alert("没有需要补录的快递单！");
+            }
+        }
+    );
+}
+
+var deleteBalance = function(){
+    debugger;
+    var rows = gridManager.getSelectedRows();
+    if(0 == rows.length){
+        alert("请选择需要删除的快递单信息。");
+    }
+    var ids = "";
+    for(var i = 0; i < rows.length; i++){
+        if(0 == i){
+            ids += rows[i].balanceId;
+        } else {
+            ids += ","+rows[i].balanceId;
+        }
+    }
+    SubmitUtils.getJSON(
+        "/replenishController/deleteBalance.do",
+        {"ids":ids},
+        function(json){
+            if(json.success){
+                alert(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            } else {
+                error(json.message, function(){
+                    gridManager.loadData(true);
+                });
             }
         }
     );

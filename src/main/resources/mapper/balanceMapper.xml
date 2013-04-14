@@ -196,4 +196,11 @@
         </set>
         where BALANCE_ID = #{balanceId}
     </update>
+
+    <delete id="deleteBalance" parameterType="String">
+        DELETE FROM t_balance WHERE BALANCE_ID in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
 </mapper>

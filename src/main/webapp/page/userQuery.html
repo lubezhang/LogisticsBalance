@@ -55,7 +55,7 @@
             </tr>
             <tr>
                 <td align="right" class="l-table-edit-td">确认密码:</td>
-                <td align="left" class="l-table-edit-td"><input name="repassword" type="password" id="repassword" ltype="text" validate="{required:true,minlength:5,maxlength:64}" /></td>
+                <td align="left" class="l-table-edit-td"><input name="repassword" type="password" id="repassword" ltype="text" validate="{required:true,'equalTo':'#password',minlength:5,maxlength:64,messages{'equalTo':'两次密码不一致'}}" /></td>
                 <td align="left"></td>
             </tr>
             <tr>

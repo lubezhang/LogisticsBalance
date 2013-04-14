@@ -6,6 +6,7 @@ import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
 import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;
+import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -187,6 +188,19 @@ public class ReplenishController {
             rsMap.put("successful", false);
             rsMap.put("message", e.getMessage());
             rsMap.put("resultValue", map);
+        }
+        return rsMap;
+    }
+
+    @RequestMapping("deleteBalance")
+    public @ResponseBody Map<String, Object> deleteBalance(String[] ids){
+        Map<String, Object> rsMap = null;
+        try {
+            replenishService.deleteBalance(ids);
+            rsMap = LigerUtils.resultSuccess("删除快递单成功！");
+        } catch (LogisticsException e) {
+            logger.error(e);
+            rsMap = LigerUtils.resultFail("删除快递单失败！");
         }
         return rsMap;
     }

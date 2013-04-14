@@ -1,7 +1,3 @@
-var alert = function (content, title){
-    $.ligerDialog.alert(content, title);
-};
-
 $(function(){
     $("#searchbtn").ligerButton({ click: showBalance});
 });

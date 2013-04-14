@@ -39,7 +39,7 @@ $(function(){
         url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
         width: '100%', height: '100%',
-        heightDiff:0, checkbox: true,
+        heightDiff:0, checkbox: false,
         alternatingRow:true,rownumbers:true,
         selectRowButtonOnly:true,
         enabledSort:true
@@ -65,12 +65,11 @@ function itemclick(item){
 }
 
 function downloadBalance(){
-//    var params = "customerId=" + $("#customerId").val();
-//    params += "&payoffState=" + $('#payoffState').combobox('getValue');
-//    params += "&balanceCode=" + $("#balanceCode").val();
-//    params += "&addrDateBegin=" + $('#addresseeDate1').datebox('getValue');
-//    params += "&addrDateEnd=" + $('#addresseeDate2').datebox('getValue');
-
+    $("form input").each(function(){
+        debugger;
+        var id = $(this).attr("id")
+        $(this).val($("#s_"+id).val());
+    });
+    $("#payoffState").val("2");
     downloadSubmit.submit();
-    //$("#downloadContent").attr("src","/replenishController/exportLogistics.do?"+params);
 }

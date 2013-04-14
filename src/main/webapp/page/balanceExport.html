@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../lib/jquery/jquery-1.5.2.min.js"></script>
     <script type="text/javascript" src="../lib/ligerUI/js/core/base.js"></script>
     <script type="text/javascript" src="../lib/ligerUI/js/ligerui.all.js"></script>
+    <script type="text/javascript" src="../resource/script/common.js"></script>
     <script type="text/javascript" src="../resource/script/balanceExport.js"></script>
 </head>
 <body style="padding:0px; overflow:hidden;">
@@ -26,8 +27,11 @@
 <div id="maingrid"></div>
 
 <form action="/replenishController/exportLogistics.do" name="downloadSubmit" method="post" target="downloadContent">
-    <input type="hidden" name="customerId" value=""/>
-    <input type="hidden" name="payoffState" value="2"/>
+    <input type="hidden" name="customerId" id="customerId" value=""/>
+    <input type="hidden" name="payoffState" id="payoffState" value="2"/>
+    <input type="hidden" name="balanceCode" id="balanceCode" value=""/>
+    <input type="hidden" name="addrDateBegin" id="addrDateBegin" value=""/>
+    <input type="hidden" name="addrDateEnd" id="addrDateEnd" value=""/>
 </form>
 <iframe id="downloadContent" name="downloadContent" src="" width="0" height="0" frameborder="0"></iframe>
 </body>

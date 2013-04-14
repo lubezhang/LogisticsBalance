@@ -280,4 +280,9 @@ public class ReplenishServiceImp implements IReplenishService {
         }
         return entityMap;
     }
+
+    @Override
+    public void deleteBalance(String[] ids) throws LogisticsException{
+        iReplenishDao.deleteBalance(ids);
+    }
 }

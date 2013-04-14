@@ -36,4 +36,6 @@ public interface IReplenishDao {
 
     public Map<String, Object> payMoney(TBalance entity);
     public Map<String, Object> notPayMoney(TBalance entity);
+
+    void deleteBalance(String[] ids);
 }

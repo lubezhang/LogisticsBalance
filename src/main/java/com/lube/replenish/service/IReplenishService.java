@@ -1,6 +1,7 @@
 package com.lube.replenish.service;
 
 import com.lube.replenish.entity.TBalance;
+import com.lube.utils.LogisticsException;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -63,4 +64,6 @@ public interface IReplenishService {
     Map<String, String> getTotalMoney(TBalance balance);
 
     Map<String, Object> queryBalanceDetail(TBalance entity);
+
+    void deleteBalance(String[] ids) throws LogisticsException;
 }

@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../lib/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript" src="../lib/jquery-validation/jquery.metadata.js"></script>
     <script type="text/javascript" src="../lib/jquery-validation/messages_cn.js"></script>
+    <script type="text/javascript" src="../resource/script/common.js"></script>
     <script type="text/javascript" src="../resource/script/balanceReplenish.js"></script>
     <style type="text/css">
         .l-table-edit {}
@@ -65,7 +66,7 @@
             <tr>
                 <td align="right" class="l-table-edit-td">应收金额:</td>
                 <td align="left" class="l-table-edit-td">
-                    <input name="money" type="text" id="money" ltype='spinner' ligerui="{type:'int'}" value="20" class="required" validate="{digits:true,min:1,max:1000000}" />
+                    <input name="money" type="text" id="money" ltype='spinner' ligerui="{type:'float',isNegative:false}" value="0" class="required" validate="{min:0,max:1000000}" />
                 </td><td align="left"></td>
             </tr>
             <tr>
@@ -76,6 +77,11 @@
                         <option value="2">未结</option>
                     </select>
                 </td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">快递员:</td>
+                <td align="left" class="l-table-edit-td"><input name="balanceUser" type="text" id="balanceUser" ltype="text" validate="{required:true,minlength:3,maxlength:100}" /></td>
+                <td align="left"></td>
             </tr>
             <tr>
                 <td align="right" class="l-table-edit-td">收件日期:</td>

@@ -10,28 +10,59 @@
         <result property="operatorType" column="OPERATOR_TYPE"/>
     </resultMap>
 
-    <!-- 查询学生，根据id -->
+    <!-- 查询，根据id -->
     <select id="verifyLogin" parameterType="String" resultType="user" resultMap="operatorMap">
-        <![CDATA[
-            SELECT OPERATOR_ID, USERNAME, OPERATOR_NAME, OPERATOR_TYPE
-            FROM T_OPERATOR WHERE USERNAME = #{username} AND PASSWORD = #{password}
-        ]]>
+        SELECT OPERATOR_ID, USERNAME, OPERATOR_NAME, OPERATOR_TYPE
+        FROM T_OPERATOR
+        <where>
+            <if test=" username != null and username != ''">
+                and USERNAME = #{username}
+            </if>
+            <if test=" password != null and password != ''">
+                and PASSWORD = #{password}
+            </if>
+        </where>
     </select>
 
     <select id="queryAllUser" parameterType="java.util.Map" resultType="user" resultMap="operatorMap">
         SELECT OPERATOR_ID, USERNAME, PASSWORD, OPERATOR_NAME, OPERATOR_TYPE
           FROM T_OPERATOR
         <where>
-
+            <if test=" username != null and username != ''">
+                and USERNAME like '%' #{username} '%'
+            </if>
+            <if test=" operatorName != null and operatorName != ''">
+                and OPERATOR_NAME like '%' #{operatorName} '%'
+            </if>
         </where>
-        <if test=" page != null and page != ''">
+        <if test=" pagesize != null and pagesize != ''">
             limit #{page},#{pagesize}
         </if>
+
     </select>
     <select id="queryAllUserCount" parameterType="java.util.Map" resultType="Integer">
         SELECT count(1) FROM T_OPERATOR
         <where>
-
+            <if test=" username != null and username != ''">
+                and USERNAME like '%' #{username} '%'
+            </if>
+            <if test=" operatorName != null and operatorName != ''">
+                and OPERATOR_NAME like '%' #{operatorName} '%'
+            </if>
         </where>
     </select>
+
+    <insert id="addUser" parameterType="user">
+        INSERT INTO
+          t_operator(OPERATOR_ID, USERNAME, PASSWORD, OPERATOR_NAME, OPERATOR_TYPE)
+        VALUES
+          (#{operatorId},#{username},#{password},#{operatorName},#{operatorType})
+    </insert>
+
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM t_operator WHERE OPERATOR_ID in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
 </mapper>

@@ -15,20 +15,20 @@
         <result property="addrDateEnd" column="ADDRESSEE_DATE"/>
         <result property="isEdit" column="IS_EDIT"/>
         <result property="balanceUser" column="BALANCE_USER"/>
-        <result property="user" column="OPERATOR"/>
+        <result property="operator" column="OPERATOR"/>
         <result property="operatorDate" column="OPERATOR_DATE"/>
     </resultMap>
 
     <insert id="insertBalance" parameterType="tBalance">
         insert into t_balance
-          (BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE,GATHER_STATE,MONEY,PAYOFF_STATE,ADDRESSEE_DATE,IS_EDIT,BALANCE_USER,OPERATOR,OPERATOR_DATE)
+          (BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE,GATHER_STATE,MONEY,PAYOFF_STATE,ADDRESSEE_DATE,IS_EDIT,BALANCE_USER,OPERATOR)
         values
-          (#{balanceId},#{customerId},#{operatorId},#{balanceCode},#{gatherState},#{money},#{payoffState},#{addresseeDate},#{isEdit},#{balanceUser},#{user},now())
+          (#{balanceId},#{customerId},#{operatorId},#{balanceCode},#{gatherState},#{money},#{payoffState},#{addresseeDate},#{isEdit},#{balanceUser},#{operator})
     </insert>
 
     <select id="queryAllBalance" parameterType="Map" resultMap="balanceMap">
         select
-          BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,ADDRESSEE_DATE,OPERATOR_DATE
+          BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,BALANCE_USER,ADDRESSEE_DATE,OPERATOR_DATE
         from
             t_balance t1,
             (SELECT * FROM t_dict where dict_type = 1) t2,
@@ -42,7 +42,7 @@
             and BALANCE_CODE = #{balanceCode}
         </if>
         <if test=" customerId != null and customerId != ''">
-            and CUSTOMER_ID like #{customerId} '%'
+            and CUSTOMER_ID like '%' #{customerId} '%'
         </if>
         <if test=" payoffState != null and payoffState != ''">
             and PAYOFF_STATE = #{payoffState}
@@ -57,7 +57,7 @@
             <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
         </if>
         order by t1.ADDRESSEE_DATE desc
-        <if test=" page != null and page != ''">
+        <if test=" pagesize != null and pagesize != ''">
             limit #{page},#{pagesize}
         </if>
     </select>
@@ -77,7 +77,7 @@
                 and BALANCE_CODE = #{balanceCode}
             </if>
             <if test=" customerId != null and customerId != ''">
-                and CUSTOMER_ID like #{customerId} '%'
+                and CUSTOMER_ID like '%' #{customerId} '%'
             </if>
             <if test=" payoffState != null and payoffState != ''">
                 and PAYOFF_STATE = #{payoffState}
@@ -100,7 +100,7 @@
             and BALANCE_CODE = #{balanceCode}
         </if>
         <if test=" customerId != null and customerId != ''">
-            and CUSTOMER_ID like #{customerId} '%'
+            and CUSTOMER_ID like '%' #{customerId} '%'
         </if>
         <!--<if test=" payoffState != null and payoffState != ''">-->
             <!--and PAYOFF_STATE = #{payoffState}-->
@@ -123,7 +123,7 @@
             and BALANCE_CODE = #{balanceCode}
         </if>
         <if test=" customerId != null and customerId != ''">
-            and CUSTOMER_ID like #{customerId} '%'
+            and CUSTOMER_ID like '%' #{customerId} '%'
         </if>
         <!--<if test=" payoffState != null and payoffState != ''">-->
             <!--and PAYOFF_STATE = #{payoffState}-->
@@ -166,23 +166,26 @@
     <update id="updateBalance" parameterType="tBalance">
         update t_balance
         <set>
-            <if test="customerId != null">
+            <if test="customerId != null and customerId != ''">
                 CUSTOMER_ID = #{customerId},
             </if>
-            <if test="gatherState != null">
+            <if test="gatherState != null and gatherState != ''">
                 GATHER_STATE = #{gatherState},
             </if>
-            <if test="money != null">
+            <if test="money != null and money != ''">
                 MONEY = #{money},
             </if>
-            <if test="payoffState != null">
+            <if test="payoffState != null and payoffState != ''">
                 PAYOFF_STATE = #{payoffState},
             </if>
-            <if test="addresseeDate != null">
+            <if test="addresseeDate != null and addresseeDate != ''">
                 ADDRESSEE_DATE = #{addresseeDate},
             </if>
-            <if test="operatorId != null">
+            <if test="operatorId != null and operatorId != ''">
                 OPERATOR_ID = #{operatorId},
+            </if>
+            <if test="balanceUser != null and balanceUser != ''">
+                BALANCE_USER = #{balanceUser},
             </if>
             <if test="1 == 1">
                 IS_EDIT = 1,

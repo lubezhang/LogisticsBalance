@@ -1,7 +1,9 @@
 package com.lube.user.service;
 
+import com.lube.common.MD5EncryptUtils;
 import com.lube.user.dao.IUserDao;
 import com.lube.user.entity.User;
+import com.lube.utils.BalanceUtils;
 import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements IUserService {
     public User verifyLogin(User user) throws LogisticsException {
         User rsUser;
         try{
+            user.setPassword(MD5EncryptUtils.MD5Encode(user.getPassword()));
             rsUser = userDao.verifyLogin(user);
 //            user = list.size() > 0?list.get(0):null;
         }catch (Exception e){
@@ -58,5 +61,29 @@ public class UserServiceImpl implements IUserService {
         return userDao.queryAllUserCount(par);
     }
 
+    @Override
+    public void addUser(Map<String, String> params) throws LogisticsException {
+        try{
+            params.put("operatorId", BalanceUtils.generatorUUID());
+            params.put("password", MD5EncryptUtils.MD5Encode(params.get("password")));
+            userDao.addUser(params);
+        } catch (Exception e){
+            throw new LogisticsException("添加用户异常：",e);
+        }
+    }
 
+    @Override
+    public void checkUserName(String userName) throws LogisticsException {
+        User user = new User();
+        user.setUsername(userName);
+        User rsUser = userDao.verifyLogin(user);
+        if(null != rsUser){
+            throw new LogisticsException("用户名已经存在");
+        }
+    }
+
+    @Override
+    public void deleteUser(String[] ids) throws LogisticsException {
+        userDao.deleteUser(ids);
+    }
 }

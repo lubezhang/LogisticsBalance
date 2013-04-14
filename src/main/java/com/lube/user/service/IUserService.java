@@ -24,4 +24,14 @@ public interface IUserService {
 
     List<User> queryAllUser(Map<String,String> params);
     int queryAllUserCount(Map<String, String> params);
+
+    void addUser(Map<String,String> params) throws LogisticsException;
+
+    /**
+     * 检查用户名是否存在
+     * @param userName
+     */
+    void checkUserName(String userName) throws LogisticsException;
+
+    void deleteUser(String[] ids) throws LogisticsException;
 }

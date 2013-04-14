@@ -19,8 +19,9 @@ $(function(){
 //            { display: "主键", name: "balanceId", width: 120 },
             { display: "快递单号", name: "balanceCode", width: 120 },
             { display: "客户", name: "customerId", width: 320 },
-            { display: "修改日期", name: "operatorDate", width: 120 },
-            { display: "收件日期", name: "addresseeDate", width: 120 }
+            { display: "快递员", name: "balanceUser", width: 120 },
+            { display: "收件日期", name: "addresseeDate", width: 120 },
+            { display: "修改日期", name: "operatorDate", width: 120 }
         ],
         dataAction: 'server',
         pageSize: 20,
@@ -39,6 +40,7 @@ $(function(){
     gridManager = $("#maingrid").ligerGetGridManager();
     $("#pageloading").hide();
 
+//    $("#money").ligerSpinner({ height: 28, type: 'int',isNegative:false });
     initForm();
 });
 
@@ -64,12 +66,10 @@ function initForm(){
         },
         submitHandler: function (){
             $("form .l-text,.l-textarea").ligerHideTip();
-//            alert("Submitted!")
-            $.getJSON(
-                "/replenishController/updateBalanceDetail.do?random="+new Date().getTime(),
-                $("#form1").serialize(),
+            SubmitUtils.getJSON(
+                "/replenishController/updateBalanceDetail.do",
+                decodeURIComponent($("#form1").serialize()),
                 function(json){
-                    debugger;
                     if(json.successful){
                         $.ligerDialog.alert("修改成功", "处理信息",'',function(){
                             editNext();
@@ -102,7 +102,7 @@ function itemclick(item){
 }
 //导入快递单图片
 function importBalance(){
-    $.getJSON(
+    SubmitUtils.getJSON(
         "/replenishController/importPic.do",
         "",
         function(json){
@@ -120,23 +120,22 @@ function importBalance(){
     );
 }
 
-var win = null;
+var balanceWin = null;
 function editNext(){
-    $.getJSON(
-        "/replenishController/queryNextDetail.do?random="+new Date().getTime(),
+    SubmitUtils.getJSON(
+        "/replenishController/queryNextDetail.do",
         "",
         function(json){
-            debugger;
             if(json){
                 for(var key in json){
                     $("#"+key).val(json[key]);
                 }
                 $("#balancePic").attr("src",json.picPath);
-                if(null == win){
-                    win = $.ligerDialog.open({title:"快递单详情",height: 200,showMax:true, isResize: true, target:$("#balanceDetail") });
-                    win.max();
+                if(null == balanceWin){
+                    balanceWin = $.ligerDialog.open({title:"快递单详情",height: 200,showMax:true, isResize: false, target:$("#balanceDetail") });
+                    balanceWin.max();
                 } else {
-                    win.show();
+                    balanceWin.show();
                 }
             } else {
                 alert("没有需要补录的快递单！");

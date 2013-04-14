@@ -17,4 +17,8 @@ public interface IUserDao {
     User verifyLogin(User user);
     List<User> queryAllUser(Map<String, Object> params);
     int queryAllUserCount(Map<String, Object> params);
+
+    void addUser(Map<String,String> params);
+
+    void deleteUser(String[] ids);
 }

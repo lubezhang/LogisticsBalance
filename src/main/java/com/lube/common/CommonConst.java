@@ -22,8 +22,5 @@ public class CommonConst {
     public static final String BALANCE_PIC_COMPLETE = "complete";
     public static final String BALANCE_PIC_ERROR = "error";
 
-
-    public static final String USER_SESSION_KEY = "userSessionKey";
-
     public static final String OPERATOR_SESSION_KEY = "operatorKey";
 }

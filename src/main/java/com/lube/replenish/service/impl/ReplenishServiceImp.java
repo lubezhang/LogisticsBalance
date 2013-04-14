@@ -94,6 +94,7 @@ public class ReplenishServiceImp implements IReplenishService {
                 balance.setGatherState("2");
                 balance.setPayoffState("2");
                 balance.setEdit("0");
+                balance.setBalanceUser("");
                 insertBalance(balance);
                 String srcPath = strSrcPath + picName;
                 String distPath = rootPath + CommonConst.BALANCE_PIC_COMPLETE + File.separator + picName;
@@ -104,6 +105,7 @@ public class ReplenishServiceImp implements IReplenishService {
                 String distPath = rootPath + CommonConst.BALANCE_PIC_ERROR + File.separator + picName;
                 FileUtils.move(srcPath, distPath);
                 errorCount++;
+                logger.error("导入快递单异常：",e);
             }
         }
 
@@ -127,10 +129,8 @@ public class ReplenishServiceImp implements IReplenishService {
         Map<String, Object> params = BalanceUtils.boToMapForBalance(entity);
         List<TBalance> list = iReplenishDao.queryAllBalance(params);
         List<Map<String, String>> listMap = new ArrayList<Map<String, String>>(0);
-        Map<String, String> entityMap = null;
         try {
             for (TBalance t : list) {
-                entityMap = new HashMap<String, String>(0);
                 Map map = BeanUtils.describe(t);
                 map.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + t.getBalanceCode() + ".jpg");
                 listMap.add(map);

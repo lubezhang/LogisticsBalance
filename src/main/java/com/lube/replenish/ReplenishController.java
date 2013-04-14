@@ -8,6 +8,7 @@ import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -81,7 +82,7 @@ public class ReplenishController {
                 count = list.get(list.size()-1).get("count");
                 list.remove(list.size()-1);
             }
-            resBody = LigerUtils.resultMap(list, count);
+            resBody = LigerUtils.resultList(list, count);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -119,7 +120,7 @@ public class ReplenishController {
     }
 
     @RequestMapping("updateBalanceDetail")
-    public @ResponseBody Map<String, String> updateBalanceDetail(@RequestParam Map<String, String> params, HttpServletRequest request) throws Exception{
+    public @ResponseBody Map<String, String> updateBalanceDetail(@RequestParam Map<String, String> params,@ModelAttribute TBalance balance, HttpServletRequest request) throws Exception{
         Map<String ,String> map = new HashMap<String, String>(0);
         try{
             TBalance entity = new TBalance();
@@ -127,6 +128,7 @@ public class ReplenishController {
             entity.setBalanceCode(params.get("balanceCode"));
             entity.setCustomerId(params.get("customerId"));
             entity.setGatherState(params.get("gatherState"));
+            entity.setBalanceUser(params.get("balanceUser"));
             entity.setMoney(Float.parseFloat(params.get("money")));
             User user = (User) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
             entity.setOperatorId(user.getOperatorId());

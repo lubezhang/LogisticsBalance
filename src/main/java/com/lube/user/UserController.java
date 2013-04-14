@@ -6,14 +6,20 @@ import com.lube.user.entity.User;
 import com.lube.user.service.IUserService;
 import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
+import org.springframework.expression.spel.ast.Operator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +40,22 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @RequestMapping("index")
+    public String index() throws Exception {
+        return "index";
+    }
+
+    @RequestMapping("logout")
+    public String logout() throws Exception {
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session = sra == null ? null : sra.getRequest().getSession(true);
+//        Operator o session.getAttribute(CommonConst.OPERATOR_SESSION_KEY);
+        session.removeAttribute(CommonConst.OPERATOR_SESSION_KEY);
+        return "login";
+    }
     @RequestMapping("login")
     public String login() throws Exception {
-        return "index";
+        return "login";
     }
 
     /**
@@ -73,11 +92,43 @@ public class UserController {
         try {
             List<User> list = userService.queryAllUser(params);
             String count = String.valueOf(userService.queryAllUserCount(params));
-            resBody = LigerUtils.resultMap(list, count);
+            resBody = LigerUtils.resultList(list, count);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
         return resBody;
     }
 
+    @RequestMapping("addUser")
+    public @ResponseBody Map<String, Object> addUser(@RequestParam Map<String, String> params){
+        try {
+            userService.checkUserName(params.get("username"));
+        } catch (LogisticsException e) {
+            return LigerUtils.resultFail(e.getMessage());
+        }
+
+        Map<String, Object> rsMap = null;
+        try {
+            userService.addUser(params);
+            rsMap = LigerUtils.resultSuccess("添加用户成功！");
+        } catch (LogisticsException e) {
+            logger.error(e);
+            rsMap = LigerUtils.resultFail(e.getMessage());
+        }
+        return rsMap;
+    }
+
+    @RequestMapping("deleteUser")
+    public @ResponseBody Map<String, Object> deleteUser(String[] ids){
+        logger.debug(ids);
+        Map<String, Object> rsMap = null;
+        try {
+            userService.deleteUser(ids);
+            rsMap = LigerUtils.resultSuccess("删除用户成功！");
+        } catch (LogisticsException e) {
+            logger.error(e);
+            rsMap = LigerUtils.resultFail("删除用户失败！");
+        }
+        return rsMap;
+    }
 }

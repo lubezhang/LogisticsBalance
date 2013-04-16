@@ -110,7 +110,7 @@ function itemclick(item){
 }
 var userWin = null;
 function addUser(){
-    userWin = $.ligerDialog.open({title:"添加用户",height: 300,width:300,showMax:true, isResize: false, target:$("#userDetail") });
+    userWin = $.ligerDialog.open({title:"添加用户",height: 300,width:300,showMax:true,isDrag:false, isResize: false, target:$("#userDetail") });
     var arrays = $("#form1").serializeArray();
     for(var key in arrays){
         $("#"+arrays[key].name).val("");

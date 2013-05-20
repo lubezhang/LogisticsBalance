@@ -7,7 +7,7 @@ $(function(){
         if (!gridManager) return;
         gridManager.setOptions(
             { parms: [
-                { name: 'balanceCode', value: $("#s_balanceCode").val()},
+//                { name: 'balanceCode', value: $("#s_balanceCode").val()},
                 { name: 'customerId', value: $("#s_customerId").val()},
                 { name: 'addrDateBegin', value: $("#s_addrDateBegin").val()},
                 { name: 'addrDateEnd', value: $("#s_addrDateEnd").val()}
@@ -40,9 +40,26 @@ $(function(){
         sortName: 'operatorDate',
         width: '100%', height: '100%',
         heightDiff:0, checkbox: false,
-        alternatingRow:true,rownumbers:true,
+        alternatingRow:true,
+        rownumbers:true,
         selectRowButtonOnly:true,
-        enabledSort:true
+        enabledSort:true,
+        onBeforeShowData:function(data){
+            SubmitUtils.getJSON(
+                "/replenishController/getTotalMoney.do",
+                gridManager.options.parms,
+                function(json){
+                    debugger;
+                    if(json){
+                        if(json.successful){
+                            $("#gatherMoney").text("未结："+json.resultValue.notPayMoney+"  已结："+json.resultValue.payMoney);
+                        } else {
+                            alert(json.message,"处理信息");
+                        }
+                    }
+                }
+            );
+        }
 
     });
     gridManager = $("#maingrid").ligerGetGridManager();

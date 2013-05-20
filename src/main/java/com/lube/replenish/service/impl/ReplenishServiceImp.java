@@ -4,9 +4,11 @@ import com.lube.common.CommonConst;
 import com.lube.replenish.dao.IReplenishDao;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
+import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;
 import com.lube.utils.FileUtils;
 import com.lube.utils.LogisticsException;
+import com.lube.utils.WebUtils;
 import com.lube.utils.excel.ExcelCellStyleUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -244,8 +246,10 @@ public class ReplenishServiceImp implements IReplenishService {
     }
 
     @Override
-    public Map<String, String> queryNextBalance() {
-        TBalance bean = iReplenishDao.queryNextBalance();
+    public Map<String, String> queryNextBalance(String userId) {
+        Map<String, String> params = new HashMap<String, String>(0);
+        params.put("lockUser", userId);
+        TBalance bean = iReplenishDao.queryNextBalance(params);
         Map<String, String> entityMap = null;
         try {
             entityMap = new HashMap<String, String>(0);
@@ -284,5 +288,13 @@ public class ReplenishServiceImp implements IReplenishService {
     @Override
     public void deleteBalance(String[] ids) throws LogisticsException{
         iReplenishDao.deleteBalance(ids);
+    }
+
+    @Override
+    public void lockBalance(String[] ids, User user) throws LogisticsException {
+        Map<String, Object> params = new HashMap<String, Object>(0);
+        params.put("ids", ids);
+        params.put("userId", user.getOperatorId());
+        iReplenishDao.lockBalance(params);
     }
 }

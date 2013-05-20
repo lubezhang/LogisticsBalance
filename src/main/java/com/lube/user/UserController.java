@@ -69,16 +69,21 @@ public class UserController {
         logger.debug(user);
         Map<String, String> map = new HashMap<String, String>();
         User oper = null;
+
         try {
             oper = userService.verifyLogin(user);
             if(null != oper){
-                request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
+//                request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
+                ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+                HttpSession session = attr == null ? null : attr.getRequest().getSession(true);
+                session.setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
                 map.put("success","true");
             } else {
                 map.put("success","false");
                 map.put("message","登录失败，请检查用户名和密码！");
             }
         } catch (LogisticsException e) {
+            logger.error("校验登录信息失败：",e);
             map.put("success","false");
             map.put("message","登录失败，系统异常！");
         }

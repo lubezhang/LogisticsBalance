@@ -22,6 +22,7 @@ public class TBalance{
     private String balanceUser;
     private String operator;
     private String operatorDate;
+    private String lockUser;
 
     public String getBalanceId() {
         return balanceId;
@@ -135,6 +136,14 @@ public class TBalance{
         this.operatorDate = operatorDate;
     }
 
+    public String getLockUser() {
+        return lockUser;
+    }
+
+    public void setLockUser(String lockUser) {
+        this.lockUser = lockUser;
+    }
+
     @Override
     public String toString() {
         return "TBalance{" +
@@ -152,6 +161,7 @@ public class TBalance{
                 ", balanceUser='" + balanceUser + '\'' +
                 ", operator='" + operator + '\'' +
                 ", operatorDate='" + operatorDate + '\'' +
+                ", lockUser='" + lockUser + '\'' +
                 '}';
     }
 

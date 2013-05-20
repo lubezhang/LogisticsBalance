@@ -16,6 +16,7 @@ $(function(){
             { display: "快递单号", name: "balanceCode", width: 120 },
             { display: "客户", name: "customerId", width: 320 },
             { display: "快递员", name: "balanceUser", width: 120 },
+            { display: "补录员", name: "lockUser", width: 120 },
             { display: "收件日期", name: "addresseeDate", width: 120 },
             { display: "修改日期", name: "operatorDate", width: 120 }
         ],
@@ -26,7 +27,9 @@ $(function(){
             { line: true },
             { id:"edit", text: '补录', click: itemclick, icon: 'edit' },
             { line: true },
-            { id:"delete", text: '删除', click: itemclick, icon: 'delete' }
+            { id:"delete", text: '删除', click: itemclick, icon: 'delete' },
+            { line: true },
+            { id:"lock", text: '锁定', click: itemclick, icon: 'lock' }
         ]},
         url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
@@ -97,6 +100,11 @@ function itemclick(item){
         case "delete":
             deleteBalance();
             break;
+        case "lock":
+            lockBalance();
+            break;
+        case "unlock":
+            break;
         default:
             break;
     }
@@ -146,7 +154,6 @@ function editNext(){
 }
 
 var deleteBalance = function(){
-    debugger;
     var rows = gridManager.getSelectedRows();
     if(0 == rows.length){
         alert("请选择需要删除的快递单信息。");
@@ -175,3 +182,36 @@ var deleteBalance = function(){
         }
     );
 }
+
+/**
+ * 当前登录用户锁定需要补录的快递单，快递单被锁定后不能被其他人编辑。
+ */
+var lockBalance = function(){
+    var rows = gridManager.getSelectedRows();
+    if(0 == rows.length){
+        alert("请选择需要锁定的快递单信息。");
+    }
+    var ids = "";
+    for(var i = 0; i < rows.length; i++){
+        if(0 == i){
+            ids += rows[i].balanceId;
+        } else {
+            ids += ","+rows[i].balanceId;
+        }
+    }
+    SubmitUtils.getJSON(
+        "/replenishController/lockBalance.do",
+        {"ids":ids},
+        function(json){
+            if(json.success){
+                alert(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            } else {
+                error(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            }
+        }
+    );
+};

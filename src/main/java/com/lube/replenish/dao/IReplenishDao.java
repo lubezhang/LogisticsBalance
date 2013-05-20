@@ -32,10 +32,11 @@ public interface IReplenishDao {
 
     public int updateBalance(TBalance entity);
 
-    public TBalance queryNextBalance();
+    public TBalance queryNextBalance(Map<String, String> params);
 
     public Map<String, Object> payMoney(TBalance entity);
     public Map<String, Object> notPayMoney(TBalance entity);
 
     void deleteBalance(String[] ids);
+    void lockBalance(Map<String, Object> params);
 }

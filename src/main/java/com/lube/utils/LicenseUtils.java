@@ -91,7 +91,7 @@ public class LicenseUtils {
         Map<String, String> licMap = new HashMap<String,String>();
         licMap.put("IP",LicenseUtils.getHostIP());
         licMap.put("hostName", LicenseUtils.getHostName());
-        licMap.put("mac", LicenseUtils.getHostMac());
+        licMap.put("MAC", LicenseUtils.getHostMac());
         JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(licMap);
         return jsonObject.toString();
     }

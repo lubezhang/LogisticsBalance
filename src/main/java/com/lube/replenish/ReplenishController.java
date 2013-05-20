@@ -7,6 +7,7 @@ import com.lube.replenish.service.IReplenishService;
 import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;
 import com.lube.utils.LogisticsException;
+import com.lube.utils.WebUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -113,7 +114,7 @@ public class ReplenishController {
 
         Map<String, String> map = null;
         try {
-            map = replenishService.queryNextBalance();
+            map = replenishService.queryNextBalance(WebUtils.getCurrUser().getOperatorId());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -201,6 +202,25 @@ public class ReplenishController {
         } catch (LogisticsException e) {
             logger.error(e);
             rsMap = LigerUtils.resultFail("删除快递单失败！");
+        }
+        return rsMap;
+    }
+
+    /**
+     * 当前登录用户锁定需要补录的快递单，快递单被锁定后不能被其他人编辑。
+     * @param ids 需要锁定的快递单主键集合
+     * @return
+     */
+    @RequestMapping("lockBalance")
+    public @ResponseBody Map<String, Object> lockBalance(String[] ids){
+        Map<String, Object> rsMap = null;
+        try {
+            User user = WebUtils.getCurrUser();
+            replenishService.lockBalance(ids, user);
+            rsMap = LigerUtils.resultSuccess("锁定快递单成功！");
+        } catch (LogisticsException e) {
+            logger.error(e);
+            rsMap = LigerUtils.resultFail("锁定快递单失败！");
         }
         return rsMap;
     }

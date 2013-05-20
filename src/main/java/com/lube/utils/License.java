@@ -50,7 +50,7 @@ public class License {
             //校验MAC地址
             boolean MACFlag = LicenseUtils.getHostMac().equalsIgnoreCase(String.valueOf(jsonObject.get("MAC")));
             if(!MACFlag){
-                throw new LogisticsException("Mac地址无效！");
+                throw new LogisticsException("Mac地址无效！ "+ LicenseUtils.getHostMac()+":"+String.valueOf(jsonObject.get("MAC")));
             }
 
             if(hostNameFlag && expireDateFlag && MACFlag){

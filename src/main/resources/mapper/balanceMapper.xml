@@ -28,13 +28,15 @@
 
     <select id="queryAllBalance" parameterType="Map" resultMap="balanceMap">
         select
-          BALANCE_ID,CUSTOMER_ID,ADDRESSEE_DATE,OPERATOR_ID,BALANCE_CODE, t3.dict_name GATHER_STATE,MONEY,t2.dict_name PAYOFF_STATE,BALANCE_USER,ADDRESSEE_DATE,OPERATOR_DATE
+        t1.BALANCE_ID,t1.CUSTOMER_ID,t1.ADDRESSEE_DATE,t1.OPERATOR_ID,t1.BALANCE_CODE, t3.dict_name GATHER_STATE,
+        t1.MONEY,t2.dict_name PAYOFF_STATE,t1.BALANCE_USER,t1.ADDRESSEE_DATE,t1.OPERATOR_DATE,t4.OPERATOR_NAME lockUser
         from
             t_balance t1,
             (SELECT * FROM t_dict where dict_type = 1) t2,
-            (SELECT * FROM t_dict where dict_type = 2) t3
+            (SELECT * FROM t_dict where dict_type = 2) t3,
+            (SELECT BALANCE_ID, OPERATOR_NAME FROM t_balance LEFT OUTER JOIN t_operator ON (t_balance.LOCK_USER = t_operator.OPERATOR_ID)) t4
         where
-          t1.PAYOFF_STATE = t2.dict_code and t1.GATHER_STATE = t3.dict_code
+          t1.PAYOFF_STATE = t2.dict_code and t1.GATHER_STATE = t3.dict_code and t1.BALANCE_ID = t4.BALANCE_ID
         <if test=" balanceId != null and balanceId != ''">
             and BALANCE_ID = #{balanceId}
         </if>
@@ -146,7 +148,7 @@
         from
             t_balance t1
         where
-            t1.is_edit = 0
+            t1.LOCK_USER = #{lockUser} and t1.is_edit = 0
         limit 1
     </select>
 
@@ -203,4 +205,18 @@
             #{ids}
         </foreach>
     </delete>
+
+    <!--锁定快递单，不能被其他用户编辑-->
+    <update id="lockBalance" parameterType="Map">
+        update t_balance
+        <set>
+            <if test="userId != null and userId != ''">
+                LOCK_USER = #{userId},
+            </if>
+        </set>
+        where BALANCE_ID in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
 </mapper>

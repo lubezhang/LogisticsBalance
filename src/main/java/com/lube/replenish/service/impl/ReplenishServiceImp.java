@@ -252,10 +252,14 @@ public class ReplenishServiceImp implements IReplenishService {
         TBalance bean = iReplenishDao.queryNextBalance(params);
         Map<String, String> entityMap = null;
         try {
+            if(null == bean){
+                throw new LogisticsException("没有需要补录的快递单！");
+            }
             entityMap = new HashMap<String, String>(0);
             entityMap = BeanUtils.describe(bean);
             entityMap.put("picPath", "/" + CommonConst.BALANCE_PIC_CONTEXT + File.separator + CommonConst.BALANCE_PIC_COMPLETE + File.separator + bean.getBalanceCode() + ".jpg");
         } catch (Exception e) {
+            entityMap = new HashMap<String, String>(0);
             logger.error(e.getMessage(), e);
         }
         return entityMap;

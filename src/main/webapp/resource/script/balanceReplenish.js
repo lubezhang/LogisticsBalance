@@ -3,7 +3,10 @@ $(function(){
     $("#searchbtn").ligerButton({ click: function (){
         if (!gridManager) return;
         gridManager.setOptions(
-            { parms: [{ name: 'balanceCode', value: $("#sbalanceCode").val()}] }
+            { parms: [
+                { name: 'balanceCode', value: $("#sbalanceCode").val()},
+                { name: 'isEdit', value: $("#sIsEdit").val()}
+            ] }
         );
         gridManager.loadData(true);
     }
@@ -25,11 +28,11 @@ $(function(){
         toolbar: { items: [
             { id:"import", text: '导入快递单', click: itemclick, icon: 'add' },
             { line: true },
+            { id:"lock", text: '锁定', click: itemclick, icon: 'lock' },
+            { line: true },
             { id:"edit", text: '补录', click: itemclick, icon: 'edit' },
-            { line: true },
-            { id:"delete", text: '删除', click: itemclick, icon: 'delete' },
-            { line: true },
-            { id:"lock", text: '锁定', click: itemclick, icon: 'lock' }
+            { id:"delete", text: '删除', click: itemclick, icon: 'delete' }
+
         ]},
         url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
@@ -135,7 +138,7 @@ function editNext(){
         "/replenishController/queryNextDetail.do",
         "",
         function(json){
-            if(json){
+            if(!$.isEmptyObject(json)){
                 for(var key in json){
                     $("#"+key).val(json[key]);
                 }

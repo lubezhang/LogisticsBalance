@@ -52,7 +52,7 @@ $(function(){
                     debugger;
                     if(json){
                         if(json.successful){
-                            $("#gatherMoney").text("未结："+json.resultValue.notPayMoney+"  已结："+json.resultValue.payMoney);
+                            $("#gatherMoney").text("未结：【"+json.resultValue.notPayMoney+"】，  已结：【"+json.resultValue.payMoney+"】");
                         } else {
                             alert(json.message,"处理信息");
                         }

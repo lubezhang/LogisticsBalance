@@ -55,10 +55,13 @@
         <if test=" addrDateBegin != null and addrDateBegin != ''">
             and ADDRESSEE_DATE >= #{addrDateBegin}
         </if>
+        <if test=" isEdit != null and isEdit != ''">
+            and IS_EDIT = #{isEdit}
+        </if>
         <if test=" addrDateEnd != null and addrDateEnd != ''">
             <![CDATA[and ADDRESSEE_DATE <= #{addrDateEnd}]]>
         </if>
-        order by t1.ADDRESSEE_DATE desc
+        order by t1.IS_EDIT
         <if test=" pagesize != null and pagesize != ''">
             limit #{page},#{pagesize}
         </if>

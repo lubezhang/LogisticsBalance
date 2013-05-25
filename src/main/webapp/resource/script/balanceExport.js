@@ -33,13 +33,14 @@ $(function(){
         pageSize: 20,
         toolbar: { items: [
             { id:"export", text: '导出对账单', click: itemclick, icon: 'add' },
+            { line: true },
+            { id:"status", text: '快递单结算', click: itemclick, icon: 'status' },
             { line: true }
-//            { id:"update", text: '补录', click: itemclick, icon: 'modify' }
         ]},
         url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
         width: '100%', height: '100%',
-        heightDiff:0, checkbox: false,
+        heightDiff:0, checkbox: true,
         alternatingRow:true,
         rownumbers:true,
         selectRowButtonOnly:true,
@@ -76,11 +77,50 @@ function itemclick(item){
         case "export":
             downloadBalance();
             break;
+        case "status":
+            updateStatus();
+            break;
         default:
             break;
     }
 }
 
+/**
+ * 更改快递单结算状态
+ */
+function updateStatus(){
+    var rows = gridManager.getSelectedRows();
+    if(0 == rows.length){
+        alert("请选择需要结算的快递单。");
+    }
+    var ids = "";
+    for(var i = 0; i < rows.length; i++){
+        if(0 == i){
+            ids += rows[i].balanceId;
+        } else {
+            ids += ","+rows[i].balanceId;
+        }
+    }
+    SubmitUtils.getJSON(
+        "/replenishController/updatePayOff.do",
+        {"ids":ids},
+        function(json){
+            if(json.success){
+                alert(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            } else {
+                error(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            }
+        }
+    );
+}
+
+/**
+ * 下载快递对账单
+ */
 function downloadBalance(){
     $("form input").each(function(){
         debugger;

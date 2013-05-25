@@ -224,4 +224,22 @@ public class ReplenishController {
         }
         return rsMap;
     }
+
+    /**
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping("updatePayOff")
+    public @ResponseBody Map<String, Object> updatePayOff(String[] ids){
+        Map<String, Object> rsMap = null;
+        try {
+            replenishService.updatePayOff(ids);
+            rsMap = LigerUtils.resultSuccess("结算快递单成功！");
+        } catch (LogisticsException e) {
+            logger.error(e);
+            rsMap = LigerUtils.resultFail("结算快递单失败！");
+        }
+        return rsMap;
+    }
 }

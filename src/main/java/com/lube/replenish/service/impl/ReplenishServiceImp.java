@@ -301,4 +301,9 @@ public class ReplenishServiceImp implements IReplenishService {
         params.put("userId", user.getOperatorId());
         iReplenishDao.lockBalance(params);
     }
+
+    @Override
+    public void updatePayOff(String[] ids) throws LogisticsException {
+        iReplenishDao.updatePayOff(ids);
+    }
 }

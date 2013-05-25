@@ -203,7 +203,7 @@
     </update>
 
     <delete id="deleteBalance" parameterType="String">
-        DELETE FROM t_balance WHERE BALANCE_ID in
+        DELETE FROM t_balance PAYOFF_STATE WHERE BALANCE_ID in
         <foreach collection="array" item="ids" open="(" separator="," close=")">
             #{ids}
         </foreach>
@@ -219,6 +219,14 @@
         </set>
         where BALANCE_ID in
         <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <!--变更快递单结算状态为已结-->
+    <update id="updatePayOff" parameterType="Map">
+        update t_balance set PAYOFF_STATE = 1  WHERE BALANCE_ID in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
             #{ids}
         </foreach>
     </update>

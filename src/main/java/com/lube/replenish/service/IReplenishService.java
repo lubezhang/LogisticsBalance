@@ -69,4 +69,6 @@ public interface IReplenishService {
     void deleteBalance(String[] ids) throws LogisticsException;
 
     void lockBalance(String[] ids, User user) throws LogisticsException;
+
+    void updatePayOff(String[] ids) throws LogisticsException;
 }

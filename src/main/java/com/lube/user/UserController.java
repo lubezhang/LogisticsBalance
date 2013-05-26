@@ -1,19 +1,16 @@
 package com.lube.user;
 
 import com.lube.common.CommonConst;
-import com.lube.common.LigerUtils;
+import com.lube.utils.LigerUtils;
 import com.lube.user.entity.User;
 import com.lube.user.service.IUserService;
 import com.lube.utils.LogisticsException;
 import org.apache.log4j.Logger;
-import org.springframework.expression.spel.ast.Operator;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

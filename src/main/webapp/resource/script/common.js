@@ -3,7 +3,23 @@ var SubmitUtils = {
         $.post(
             url+ "?random=" + new Date().getTime(),
             data,
-            callBack,
+            function(json){
+                if($.isEmptyObject(json)){
+                    error("系统错误，请联系系统管理员！");
+                    return;
+                }
+                if(json.success){
+                    callBack();
+                } else {
+                    if(json.returnCode === "90"){
+                        error(json.message, function(){
+                            top.window.location.href = "/";
+                        });
+                    } else {
+                        error(json);
+                    }
+                }
+            },
             "json"
         );
     }

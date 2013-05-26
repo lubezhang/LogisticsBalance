@@ -1,4 +1,4 @@
-package com.lube.common;
+package com.lube.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.security.NoSuchAlgorithmException;

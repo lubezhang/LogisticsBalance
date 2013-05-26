@@ -1,7 +1,7 @@
 package com.lube.replenish;
 
 import com.lube.common.CommonConst;
-import com.lube.common.LigerUtils;
+import com.lube.utils.LigerUtils;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
 import com.lube.user.entity.User;
@@ -41,7 +41,7 @@ public class ReplenishController {
     private IReplenishService replenishService;
 
     /**
-     * 数据格式 {successful:true, message:"处理完成", resultValue:{completeCount:10, errorCount:10}}
+     * 数据格式 {success:true, message:"处理完成", resultValue:{completeCount:10, errorCount:10}}
      *
      * @param params
      * @return
@@ -52,12 +52,12 @@ public class ReplenishController {
         Map<String,String> map = null;
         try {
             map = replenishService.importBalance();
-            rsMap.put("successful", true);
+            rsMap.put("success", true);
             rsMap.put("message", "处理完成！");
             rsMap.put("resultValue", map);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
-            rsMap.put("successful", false);
+            rsMap.put("success", false);
             rsMap.put("message", e.getMessage());
             rsMap.put("resultValue", map);
         }
@@ -139,11 +139,13 @@ public class ReplenishController {
             int rs = replenishService.updateBalance(entity);
 
             if(rs > 0){
-                map.put("successful","true");
-                map.put("message","Message sent successfully.");
+//                map.put("success","true");
+//                map.put("message","Message sent successfully.");
+                LigerUtils.resultSuccess("Message sent successfully");
             } else {
-                map.put("successful","false");
-                map.put("message","Message sent unsuccessfully.");
+//                map.put("success","false");
+//                map.put("message","Message sent unsuccessfully.");
+                LigerUtils.resultSuccess("Message sent unsuccessfully");
             }
         } catch (Exception e){
             logger.error(e.getMessage(), e);
@@ -181,12 +183,12 @@ public class ReplenishController {
         Map<String,String> map = null;
         try {
             map = replenishService.getTotalMoney(BalanceUtils.mapToBalance(params));
-            rsMap.put("successful", true);
+            rsMap.put("success", true);
             rsMap.put("message", "处理完成！");
             rsMap.put("resultValue", map);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
-            rsMap.put("successful", false);
+            rsMap.put("success", false);
             rsMap.put("message", e.getMessage());
             rsMap.put("resultValue", map);
         }

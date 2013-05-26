@@ -1,6 +1,7 @@
 package com.lube.common;
 
-import com.lube.utils.License;
+import com.lube.common.license.ILicense;
+import com.lube.common.license.UsbKeyLicense;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
@@ -24,14 +25,15 @@ public class InitServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         CommonConst.BALANCE_ROOT_PATH = config.getServletContext().getRealPath("/") + CommonConst.BALANCE_PIC_CONTEXT;
 
-        logger.info("=====检查授权是否有效====");
-//        if(License.verifyLicense()){
-        if(true){
+        logger.info("=====检查系统授权====");
+        ILicense license = new UsbKeyLicense();
+        if(license.verifyLicense()){
+//        if(true){
             CommonConst.validLicense = true;
+            logger.info("=====通过系统授权验证，系统正常启动！====");
         } else {
             CommonConst.validLicense = false;
-            System.out.println("=====系统授权无效，系统终止启动！====");
-            System.exit(0);
+            logger.error("=====系统授权无效，系统终止启动！====");
         }
     }
 

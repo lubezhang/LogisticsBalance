@@ -1,7 +1,11 @@
 package com.lube.common;
 
+import com.lube.common.license.ILicense;
+import com.lube.common.license.UsbKeyLicense;
 import com.lube.user.entity.User;
+import com.lube.utils.LigerUtils;
 import org.apache.log4j.Logger;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,10 +29,13 @@ public class LicenseInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        logger.info("=============拦截请求，验证权限==============");
-        boolean flag = true;
-        if (CommonConst.validLicense) {
+        boolean flag = false;
+
+        ILicense license = new UsbKeyLicense();
+        if (license.verifyLicense()) {
+            logger.debug("校验授权成功！");
             String servletPath = request.getServletPath();
-            logger.debug("请求地址："+servletPath);
+            logger.info("请求地址：" + servletPath);
             for(int i = 0; i < paths.length; i++){
                 if(servletPath.equalsIgnoreCase(paths[i])){
                     return true;
@@ -36,8 +43,10 @@ public class LicenseInterceptor implements HandlerInterceptor {
             }
             User obj = (User) request.getSession().getAttribute(CommonConst.OPERATOR_SESSION_KEY);
             if (null != obj) {
+
                 flag = true;
             } else {
+                logger.debug("用户登录超时，请重新登录！");
 //                response.setContentType("application/json;charset=UTF-8");
 //                response.setHeader("Content-Type","application/json;charset=UTF-8");
                 //response.setHeader("Transfer-Encoding", "chunked");
@@ -47,10 +56,18 @@ public class LicenseInterceptor implements HandlerInterceptor {
 //                response.setContentType("text/json");
 //                response.getWriter().write("{\"successful\":false,\"message\":\"授权验证失败\"}");
                 response.sendRedirect("/login.html");
-                flag = false;
             }
         } else {
-            response.sendRedirect("/licenseError.html");
+            logger.debug("校验授权失败！");
+//            response.sendRedirect("/licenseError.html");
+//            LigerUtils.resultMeaage(false, "校验授权失败", "90");
+            response.setContentType("application/json;charset=UTF-8");
+            response.setHeader("Content-Type", "application/json;charset=UTF-8");
+            response.setHeader("Transfer-Encoding", "Content-Type:application/json;charset=UTF-8");
+
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/json");
+            response.getWriter().write("{\"success\":false,\"message\":\""+CommonConst.MESSAGE_SYS_LICENSE_VERIFY_FAILD+"\", \"returnCode\":\"90\"}");
         }
         return flag;
     }

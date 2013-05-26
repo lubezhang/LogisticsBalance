@@ -50,9 +50,8 @@ $(function(){
                 "/replenishController/getTotalMoney.do",
                 gridManager.options.parms,
                 function(json){
-                    debugger;
                     if(json){
-                        if(json.successful){
+                        if(json.success){
                             $("#gatherMoney").text("未结：【"+json.resultValue.notPayMoney+"】，  已结：【"+json.resultValue.payMoney+"】");
                         } else {
                             alert(json.message,"处理信息");
@@ -123,7 +122,6 @@ function updateStatus(){
  */
 function downloadBalance(){
     $("form input").each(function(){
-        debugger;
         var id = $(this).attr("id")
         $(this).val($("#s_"+id).val());
     });

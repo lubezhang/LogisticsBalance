@@ -74,12 +74,12 @@ function initForm(){
                 "/replenishController/updateBalanceDetail.do",
                 decodeURIComponent($("#form1").serialize()),
                 function(json){
-                    if(json.successful){
+                    if(json.success){
                         $.ligerDialog.alert("修改成功", "处理信息",'',function(){
                             editNext();
                         });
                     } else {
-                        alert("修改失败"+json.successful,"处理信息");
+                        alert("修改失败"+json.success,"处理信息");
                     }
                 }
             );
@@ -120,7 +120,7 @@ function importBalance(){
         function(json){
             if(json){
                 var strComplete = "";
-                if(json.successful){
+                if(json.success){
                     strComplete = "导入完成。成功【"+json.resultValue.completeCount+"】条，失败【"+json.resultValue.errorCount+"】条";
                     alert(strComplete,"处理信息");
                 } else {

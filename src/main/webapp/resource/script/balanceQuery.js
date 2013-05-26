@@ -3,9 +3,9 @@ $(function(){
 });
 
 function showBalance(){
-    $.getJSON(
+    SubmitUtils.getJSON(
         "/replenishController/queryBalanceDetail.do",
-        "balanceCode="+$("#sbalanceCode").val(),
+        {"balanceCode":$("#sbalanceCode").val()},
         function(json){
             if(json){
                 $("#balancePic").show().attr("src",json.picPath);

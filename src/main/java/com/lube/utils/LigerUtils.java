@@ -1,4 +1,4 @@
-package com.lube.common;
+package com.lube.utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,18 +20,20 @@ public class LigerUtils {
         return resBody;
     }
 
-    private static Map<String, Object> resultMeaage(boolean resultFlag, String message){
+    private static Map<String, Object> resultMeaage(boolean resultFlag, String message, String returnCode){
         Map<String, Object> resBody = new HashMap<String, Object>(0);
         resBody.put("success", resultFlag);
         resBody.put("message", message);
+        resBody.put("returnCode", returnCode);
         return resBody;
     }
 
     public static Map<String, Object> resultSuccess(String message){
-        return resultMeaage(true, message);
+        return resultMeaage(true, message, "00");
     }
 
     public static Map<String, Object> resultFail(String message){
-        return resultMeaage(false, message);
+        return resultMeaage(false, message, "00");
     }
+
 }

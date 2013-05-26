@@ -1,4 +1,4 @@
-package com.lube.utils;
+package com.lube.common.license;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
@@ -15,9 +15,10 @@ import java.util.Map;
  * User: Administrator
  * Date: 13-3-31
  * Time: 下午5:00
- * To change this template use File | Settings | File Templates.
+ *
+ * 获取本机的基本信息，用户授权校验
  */
-public class LicenseUtils {
+public class LocalHostInfo {
 
     /**
      * 获取本机IP
@@ -89,18 +90,18 @@ public class LicenseUtils {
      */
     public static String createLicenseString(){
         Map<String, String> licMap = new HashMap<String,String>();
-        licMap.put("IP",LicenseUtils.getHostIP());
-        licMap.put("hostName", LicenseUtils.getHostName());
-        licMap.put("MAC", LicenseUtils.getHostMac());
+        licMap.put("IP",LocalHostInfo.getHostIP());
+        licMap.put("hostName", LocalHostInfo.getHostName());
+        licMap.put("MAC", LocalHostInfo.getHostMac());
         JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(licMap);
         return jsonObject.toString();
     }
 
     public static void main(String[] args){
-        System.out.println(LicenseUtils.getHostIP());
-        System.out.println(LicenseUtils.getHostName());
-        System.out.println(LicenseUtils.getHostMac());
-        System.out.println(LicenseUtils.createLicenseString());
+        System.out.println(LocalHostInfo.getHostIP());
+        System.out.println(LocalHostInfo.getHostName());
+        System.out.println(LocalHostInfo.getHostMac());
+        System.out.println(LocalHostInfo.createLicenseString());
     }
 
 }

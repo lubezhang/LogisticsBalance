@@ -1,8 +1,10 @@
-package com.lube.utils;
+package com.lube.common.license;
 
 import com.lube.common.CommonConst;
+import com.lube.utils.DateUtils;
+import com.lube.utils.FileUtils;
+import com.lube.utils.LogisticsException;
 import net.sf.json.JSONObject;
-import net.sf.json.JSONString;
 import org.apache.log4j.Logger;
 import sun.misc.BASE64Decoder;
 
@@ -19,22 +21,23 @@ import java.util.Date;
  * Time: 下午2:20
  * To change this template use File | Settings | File Templates.
  */
-public class License {
-    private static Logger logger = Logger.getLogger(License.class);
+public class FileLicense implements ILicense {
+    private static Logger logger = Logger.getLogger(FileLicense.class);
 
     /**
      * 检查授权是否合法
      * {"IP":"192.168.1.103","hostName":"zhangqh-PC","mac":"00-21-5d-1f-a1-40"}
      * @return
      */
-    public static boolean verifyLicense(){
+    @Override
+    public boolean verifyLicense(){
         boolean licFlag = false;
         try {
             byte[] decodedData = decryptByPublicKey(FileUtils.readFileToBytes(CommonConst.LICENSE_FILE_PATH), getPublicKey());
             JSONObject jsonObject = JSONObject.fromObject(new String(decodedData));
 
             //机器名是否有效
-            boolean hostNameFlag = LicenseUtils.getHostName().equalsIgnoreCase((String) jsonObject.get("hostName"));
+            boolean hostNameFlag = LocalHostInfo.getHostName().equalsIgnoreCase((String) jsonObject.get("hostName"));
             if(!hostNameFlag){
                 throw new LogisticsException("机器名无效！");
             }
@@ -48,9 +51,9 @@ public class License {
             }
 
             //校验MAC地址
-            boolean MACFlag = LicenseUtils.getHostMac().equalsIgnoreCase(String.valueOf(jsonObject.get("MAC")));
+            boolean MACFlag = LocalHostInfo.getHostMac().equalsIgnoreCase(String.valueOf(jsonObject.get("MAC")));
             if(!MACFlag){
-                throw new LogisticsException("Mac地址无效！ "+ LicenseUtils.getHostMac()+":"+String.valueOf(jsonObject.get("MAC")));
+                throw new LogisticsException("Mac地址无效！ "+ LocalHostInfo.getHostMac()+":"+String.valueOf(jsonObject.get("MAC")));
             }
 
             if(hostNameFlag && expireDateFlag && MACFlag){
@@ -71,7 +74,7 @@ public class License {
      */
     public static void createHostInfo(){
         try {
-            byte[] bytes = LicenseUtils.createLicenseString().getBytes();
+            byte[] bytes = LocalHostInfo.createLicenseString().getBytes();
             byte[] encodedData = encryptByPublicKey(bytes, getPublicKey());
             FileUtils.writeBytesToFile(CommonConst.LOCALHOST_INFO_FILE_PATH,encodedData);
         } catch (Exception e) {
@@ -155,6 +158,6 @@ public class License {
     }
 
     public static void main(String[] args){
-        License.verifyLicense();
+//        License.verifyLicense();
     }
 }

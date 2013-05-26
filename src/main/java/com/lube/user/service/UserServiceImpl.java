@@ -1,6 +1,6 @@
 package com.lube.user.service;
 
-import com.lube.common.MD5EncryptUtils;
+import com.lube.utils.MD5EncryptUtils;
 import com.lube.user.dao.IUserDao;
 import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;

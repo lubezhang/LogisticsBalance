@@ -50,12 +50,10 @@ $(function(){
                 "/replenishController/getTotalMoney.do",
                 gridManager.options.parms,
                 function(json){
-                    if(json){
-                        if(json.success){
-                            $("#gatherMoney").text("未结：【"+json.resultValue.notPayMoney+"】，  已结：【"+json.resultValue.payMoney+"】");
-                        } else {
-                            alert(json.message,"处理信息");
-                        }
+                    if(json.success){
+                        $("#gatherMoney").text("未结：【"+json.resultValue.notPayMoney+"】，  已结：【"+json.resultValue.payMoney+"】");
+                    } else {
+                        alert(json.message,"处理信息");
                     }
                 }
             );

@@ -22,7 +22,7 @@ public class UsbKeyLicense implements ILicense {
     private IET299 et99 = new CET299();
 
     private String strPid = "8FC5E436";
-    private String strUserPin = "FFFFFFFFFFFFFFFF";
+    private String strUserPin = "a75654c728793814";
 
     private byte[] pid = strPid.getBytes();
     private byte[] userPin = strUserPin.getBytes();

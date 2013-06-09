@@ -52,6 +52,20 @@
         </bean>
     </mvc:interceptors>
 
+
+    <!-- 处理方法级别的@RequstMapping注解 -->
+    <!-- 配置SpringMVC @ResponseBody和@RequestBody注解 -->
+    <!-- -->
+    <bean id="jsonHttpMessageConverter"  class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+       <property name="messageConverters">
+          <list>
+            <ref bean="jsonHttpMessageConverter" />
+        </list>
+      </property>
+    </bean>
+
+
     <!-- 打开 AOP 功能 -->
     <aop:aspectj-autoproxy/>
     <!-- 激活annotation功能 -->

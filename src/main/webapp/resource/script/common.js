@@ -9,7 +9,7 @@ var SubmitUtils = {
                     return;
                 }
                 if(json.success){
-                    callBack();
+                    callBack(json);
                 } else {
                     if(json.returnCode === "90"){
                         error(json.message, function(){

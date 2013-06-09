@@ -139,10 +139,10 @@ function editNext(){
         "",
         function(json){
             if(!$.isEmptyObject(json)){
-                for(var key in json){
-                    $("#"+key).val(json[key]);
+                for(var key in json.resultValue){
+                    $("#"+key).val(json.resultValue[key]);
                 }
-                $("#balancePic").attr("src",json.picPath);
+                $("#balancePic").attr("src",json.resultValue.picPath);
                 if(null == balanceWin){
                     balanceWin = $.ligerDialog.open({title:"快递单详情",height: 200,showMax:true, isResize: false, target:$("#balanceDetail") });
                     balanceWin.max();

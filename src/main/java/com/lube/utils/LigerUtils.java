@@ -20,20 +20,29 @@ public class LigerUtils {
         return resBody;
     }
 
-    private static Map<String, Object> resultMeaage(boolean resultFlag, String message, String returnCode){
+    private static Map<String, Object> resultMeaage(boolean resultFlag, String message, String returnCode, Map map){
         Map<String, Object> resBody = new HashMap<String, Object>(0);
         resBody.put("success", resultFlag);
         resBody.put("message", message);
+        resBody.put("resultValue", map);
         resBody.put("returnCode", returnCode);
         return resBody;
     }
 
     public static Map<String, Object> resultSuccess(String message){
-        return resultMeaage(true, message, "00");
+        return resultMeaage(true, message, "00", new HashMap(0));
     }
 
     public static Map<String, Object> resultFail(String message){
-        return resultMeaage(false, message, "00");
+        return resultMeaage(false, message, "00", new HashMap(0));
+    }
+
+    public static Map<String, Object> resultValueSucess(String message, Map map){
+        return resultMeaage(true, message, "00", map);
+    }
+
+    public static Map<String, Object> resultValueSFail(String message, Map map){
+        return resultMeaage(true, message, "00", map);
     }
 
 }

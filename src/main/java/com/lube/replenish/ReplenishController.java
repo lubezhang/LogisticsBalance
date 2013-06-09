@@ -1,11 +1,11 @@
 package com.lube.replenish;
 
 import com.lube.common.CommonConst;
-import com.lube.utils.LigerUtils;
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
 import com.lube.user.entity.User;
 import com.lube.utils.BalanceUtils;
+import com.lube.utils.LigerUtils;
 import com.lube.utils.LogisticsException;
 import com.lube.utils.WebUtils;
 import org.apache.log4j.Logger;
@@ -51,15 +51,17 @@ public class ReplenishController {
         Map<String, Object> rsMap = new HashMap<String, Object>(0);
         Map<String,String> map = null;
         try {
-            map = replenishService.importBalance();
-            rsMap.put("success", true);
-            rsMap.put("message", "处理完成！");
-            rsMap.put("resultValue", map);
+//            map = replenishService.importBalance();
+//            rsMap.put("success", true);
+//            rsMap.put("message", "处理完成！");
+//            rsMap.put("resultValue", map);
+            rsMap = LigerUtils.resultValueSucess("", replenishService.importBalance());
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
-            rsMap.put("success", false);
-            rsMap.put("message", e.getMessage());
-            rsMap.put("resultValue", map);
+//            rsMap.put("success", false);
+//            rsMap.put("message", e.getMessage());
+//            rsMap.put("resultValue", map);
+            rsMap = LigerUtils.resultFail(e.getMessage());
         }
         return rsMap;
     }
@@ -87,6 +89,7 @@ public class ReplenishController {
             resBody = LigerUtils.resultList(list, count);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            resBody = LigerUtils.resultFail(e.getMessage());
         }
 
         return resBody;
@@ -100,30 +103,33 @@ public class ReplenishController {
 
         Map<String, Object> map = null;
         try {
-            map = replenishService.queryBalanceDetail(entity);
+//            map = replenishService.queryBalanceDetail(entity);
+            map = LigerUtils.resultValueSucess("", replenishService.queryBalanceDetail(entity));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            map = LigerUtils.resultFail(e.getMessage());
         }
         return map;
     }
 
     @RequestMapping("queryNextDetail")
-    public @ResponseBody Map<String, String> queryNextDetail(@RequestParam Map<String, String> params){
+    public @ResponseBody Map<String, Object> queryNextDetail(@RequestParam Map<String, String> params){
         TBalance entity = new TBalance();
         entity.setBalanceId(params.get("balanceId"));
 
-        Map<String, String> map = null;
+        Map<String, Object> map = null;
         try {
-            map = replenishService.queryNextBalance(WebUtils.getCurrUser().getOperatorId());
+            map = LigerUtils.resultValueSucess("", replenishService.queryNextBalance(WebUtils.getCurrUser().getOperatorId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            map = LigerUtils.resultFail(e.getMessage());
         }
         return map;
     }
 
     @RequestMapping("updateBalanceDetail")
-    public @ResponseBody Map<String, String> updateBalanceDetail(@RequestParam Map<String, String> params,@ModelAttribute TBalance balance, HttpServletRequest request) throws Exception{
-        Map<String ,String> map = new HashMap<String, String>(0);
+    public @ResponseBody Map<String, Object> updateBalanceDetail(@RequestParam Map<String, String> params,@ModelAttribute TBalance balance, HttpServletRequest request) throws Exception{
+        Map<String ,Object> map = new HashMap<String, Object>(0);
         try{
             TBalance entity = new TBalance();
             entity.setBalanceId(params.get("balanceId"));
@@ -141,14 +147,15 @@ public class ReplenishController {
             if(rs > 0){
 //                map.put("success","true");
 //                map.put("message","Message sent successfully.");
-                LigerUtils.resultSuccess("Message sent successfully");
+                map = LigerUtils.resultSuccess("Message sent successfully");
             } else {
 //                map.put("success","false");
 //                map.put("message","Message sent unsuccessfully.");
-                LigerUtils.resultSuccess("Message sent unsuccessfully");
+                map = LigerUtils.resultSuccess("Message sent unsuccessfully");
             }
         } catch (Exception e){
             logger.error(e.getMessage(), e);
+            map = LigerUtils.resultFail(e.getMessage());
         }
         return map;
     }
@@ -182,15 +189,14 @@ public class ReplenishController {
         Map<String, Object> rsMap = new HashMap<String, Object>(0);
         Map<String,String> map = null;
         try {
-            map = replenishService.getTotalMoney(BalanceUtils.mapToBalance(params));
-            rsMap.put("success", true);
-            rsMap.put("message", "处理完成！");
-            rsMap.put("resultValue", map);
+//            map = replenishService.getTotalMoney(BalanceUtils.mapToBalance(params));
+//            rsMap.put("success", true);
+//            rsMap.put("message", "处理完成！");
+//            rsMap.put("resultValue", map);
+            rsMap = LigerUtils.resultValueSucess("", replenishService.getTotalMoney(BalanceUtils.mapToBalance(params)));
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
-            rsMap.put("success", false);
-            rsMap.put("message", e.getMessage());
-            rsMap.put("resultValue", map);
+            logger.error(e.getMessage(), e);
+            rsMap = LigerUtils.resultFail(e.getMessage());
         }
         return rsMap;
     }
@@ -233,7 +239,8 @@ public class ReplenishController {
      * @return
      */
     @RequestMapping("updatePayOff")
-    public @ResponseBody Map<String, Object> updatePayOff(String[] ids){
+    @ResponseBody
+    public Map<String, Object> updatePayOff(String[] ids){
         Map<String, Object> rsMap = null;
         try {
             replenishService.updatePayOff(ids);

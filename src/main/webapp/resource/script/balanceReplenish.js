@@ -5,7 +5,8 @@ $(function(){
         gridManager.setOptions(
             { parms: [
                 { name: 'balanceCode', value: $("#sbalanceCode").val()},
-                { name: 'isEdit', value: $("#sIsEdit").val()}
+                { name: 'isEdit', value: $("#sIsEdit").val()},
+                { name: 'queryType', value: "replenish"}
             ] }
         );
         gridManager.loadData(true);
@@ -34,7 +35,7 @@ $(function(){
             { id:"delete", text: '删除', click: itemclick, icon: 'delete' }
 
         ]},
-        url: '/replenishController/queryBalanceList.do',
+        url: '/replenishController/queryBalanceList.do?queryType=replenish',
         sortName: 'operatorDate',
         width: '100%', height: '100%',
         heightDiff:0, checkbox: true,

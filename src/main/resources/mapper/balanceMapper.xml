@@ -37,6 +37,10 @@
             (SELECT BALANCE_ID, OPERATOR_NAME FROM t_balance LEFT OUTER JOIN t_operator ON (t_balance.LOCK_USER = t_operator.OPERATOR_ID)) t4
         where
           t1.PAYOFF_STATE = t2.dict_code and t1.GATHER_STATE = t3.dict_code and t1.BALANCE_ID = t4.BALANCE_ID
+
+        <if test=" currUserId != null and currUserId != ''">
+            and (t1.LOCK_USER = #{currUserId} or t1.LOCK_USER is null)
+        </if>
         <if test=" balanceId != null and balanceId != ''">
             and BALANCE_ID = #{balanceId}
         </if>

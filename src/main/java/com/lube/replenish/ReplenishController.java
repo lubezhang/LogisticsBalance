@@ -77,10 +77,13 @@ public class ReplenishController {
 //        entity.setAddrDateBegin(params.get("addrDateBegin"));
 //        entity.setAddrDateEnd(params.get("addrDateEnd"));
 
-        List<Map<String, String>> list = null;
         Map<String, Object> resBody = null;
         try {
-            list = replenishService.queryAllBalance(new HashMap<String, Object>(params));
+            if("replenish".equals(params.get("queryType"))){
+                params.put("currUserId", WebUtils.getCurrUser().getOperatorId());
+            }
+
+            List<Map<String, String>> list = replenishService.queryAllBalance(new HashMap<String, Object>(params));
             String count = "";
             if(null != list && list.size() > 0){
                 count = list.get(list.size()-1).get("count");

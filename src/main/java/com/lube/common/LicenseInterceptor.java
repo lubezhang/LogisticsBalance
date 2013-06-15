@@ -31,8 +31,9 @@ public class LicenseInterceptor implements HandlerInterceptor {
 //        logger.info("=============拦截请求，验证权限==============");
         boolean flag = false;
 
-        ILicense license = new UsbKeyLicense();
-        if (license.verifyLicense()) {
+//        ILicense license = new UsbKeyLicense();
+//        if (license.verifyLicense()) {
+        if(CommonConst.validLicense){
             logger.debug("校验授权成功！");
             String servletPath = request.getServletPath();
             logger.info("请求地址：" + servletPath);

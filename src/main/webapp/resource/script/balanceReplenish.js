@@ -88,7 +88,10 @@ function initForm(){
     });
     $("form").ligerForm();
     $(".l-button-test").click(function (){
-        alert(v.element($("#txtName")));
+        $("#customerId").val("");
+        $("#money").val(0);
+        $("#balanceUser").val("");
+        $("#addresseeDate").val("");
     });
 }
 
@@ -139,7 +142,11 @@ function editNext(){
         "/replenishController/queryNextDetail.do",
         "",
         function(json){
-            if(!$.isEmptyObject(json)){
+            if($.isEmptyObject(json)){
+                alert("系统错误！");
+                return;
+            }
+            if(!$.isEmptyObject(json.resultValue)){
                 for(var key in json.resultValue){
                     $("#"+key).val(json.resultValue[key]);
                 }
@@ -151,7 +158,9 @@ function editNext(){
                     balanceWin.show();
                 }
             } else {
-                alert("没有需要补录的快递单！");
+                alert("没有需要补录的快递单！", function(){
+                    balanceWin.close();
+                });
             }
         }
     );
@@ -192,12 +201,12 @@ var deleteBalance = function(){
  */
 var lockBalance = function(){
     var rows = gridManager.getSelectedRows();
-    if(0 == rows.length){
+    if(0 === rows.length){
         alert("请选择需要锁定的快递单信息。");
     }
     var ids = "";
     for(var i = 0; i < rows.length; i++){
-        if(0 == i){
+        if(0 === i){
             ids += rows[i].balanceId;
         } else {
             ids += ","+rows[i].balanceId;

@@ -11,6 +11,7 @@ $(function(){
                 { name: 'customerId', value: $("#s_customerId").val()},
                 { name: 'addrDateBegin', value: $("#s_addrDateBegin").val()},
                 { name: 'addrDateEnd', value: $("#s_addrDateEnd").val()},
+                { name: 'payoffState', value: $("#s_payoffState").val()},
                 { name: 'queryType', value: "export"}
             ] }
         );

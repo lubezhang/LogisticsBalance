@@ -27,15 +27,14 @@ $(function(){
         dataAction: 'server',
         pageSize: 20,
         toolbar: { items: [
-            { id:"import", text: '导入快递单', click: itemclick, icon: 'add' },
+            { id:"import", text: '导入补录快递单', click: itemclick, icon: 'add' },
             { line: true },
-            { id:"lock", text: '锁定', click: itemclick, icon: 'lock' },
+//            { id:"edit", text: '编辑', click: itemclick, icon: 'edit' },
+            { id:"delete", text: '删除', click: itemclick, icon: 'delete' },
             { line: true },
-            { id:"edit", text: '补录', click: itemclick, icon: 'edit' },
-            { id:"delete", text: '删除', click: itemclick, icon: 'delete' }
-
+            { id:"importQuery", text: '导入查询快递单', click: itemclick, icon: 'add' }
         ]},
-        url: '/replenishController/queryBalanceList.do?queryType=replenish&payoffState=2',
+        url: '/replenishController/queryBalanceList.do?queryType=replenish',
         sortName: 'operatorDate',
         width: '100%', height: '100%',
         heightDiff:0, checkbox: true,
@@ -99,7 +98,10 @@ function initForm(){
 function itemclick(item){
     switch (item.id){
         case "import":
-            importBalance();
+            importBalance({"payoffState":"2"});
+            break;
+        case "importQuery":
+            importBalance({"payoffState":"1"});
             break;
         case "edit":
             editNext();
@@ -107,20 +109,15 @@ function itemclick(item){
         case "delete":
             deleteBalance();
             break;
-        case "lock":
-            lockBalance();
-            break;
-        case "unlock":
-            break;
         default:
             break;
     }
 }
 //导入快递单图片
-function importBalance(){
+function importBalance(params){
     SubmitUtils.getJSON(
         "/replenishController/importPic.do",
-        "",
+        params,
         function(json){
             if(json){
                 var strComplete = "";
@@ -195,36 +192,3 @@ var deleteBalance = function(){
         }
     );
 }
-
-/**
- * 当前登录用户锁定需要补录的快递单，快递单被锁定后不能被其他人编辑。
- */
-var lockBalance = function(){
-    var rows = gridManager.getSelectedRows();
-    if(0 === rows.length){
-        alert("请选择需要锁定的快递单信息。");
-    }
-    var ids = "";
-    for(var i = 0; i < rows.length; i++){
-        if(0 === i){
-            ids += rows[i].balanceId;
-        } else {
-            ids += ","+rows[i].balanceId;
-        }
-    }
-    SubmitUtils.getJSON(
-        "/replenishController/lockBalance.do",
-        {"ids":ids},
-        function(json){
-            if(json.success){
-                alert(json.message, function(){
-                    gridManager.loadData(true);
-                });
-            } else {
-                error(json.message, function(){
-                    gridManager.loadData(true);
-                });
-            }
-        }
-    );
-};

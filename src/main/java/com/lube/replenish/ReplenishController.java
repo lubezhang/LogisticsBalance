@@ -48,19 +48,11 @@ public class ReplenishController {
      */
     @RequestMapping("importPic")
     public @ResponseBody Map<String, Object> importPic(@RequestParam Map<String, String> params){
-        Map<String, Object> rsMap = new HashMap<String, Object>(0);
-        Map<String,String> map = null;
+        Map<String, Object> rsMap = null;
         try {
-//            map = replenishService.importBalance();
-//            rsMap.put("success", true);
-//            rsMap.put("message", "处理完成！");
-//            rsMap.put("resultValue", map);
-            rsMap = LigerUtils.resultValueSucess("", replenishService.importBalance());
+            rsMap = LigerUtils.resultValueSucess("", replenishService.importBalance(params));
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
-//            rsMap.put("success", false);
-//            rsMap.put("message", e.getMessage());
-//            rsMap.put("resultValue", map);
             rsMap = LigerUtils.resultFail(e.getMessage());
         }
         return rsMap;

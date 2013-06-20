@@ -1,0 +1,135 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>快递单维护</title>
+    <link href="../lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../lib/jquery/jquery-1.5.2.min.js"></script>
+    <script type="text/javascript" src="../lib/ligerUI/js/core/base.js"></script>
+    <script type="text/javascript" src="../lib/ligerUI/js/ligerui.all.js"></script>
+    <script type="text/javascript" src="../lib/jquery-validation/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery-validation/jquery.metadata.js"></script>
+    <script type="text/javascript" src="../lib/jquery-validation/messages_cn.js"></script>
+    <script type="text/javascript" src="../resource/script/common.js"></script>
+    <script type="text/javascript" src="../resource/script/balanceManager.js"></script>
+    <style type="text/css">
+        .l-table-edit {}
+        .l-table-edit-td{ padding:4px;}
+        .l-button-submit,.l-button-test{width:80px; float:left; margin-left:10px; padding-bottom:2px;}
+        .l-verify-tip{ left:230px; top:120px;}
+    </style>
+</head>
+<body style="padding:0px; overflow:hidden;">
+
+<div class="l-panel-search">
+    <div class="l-panel-search-item">快递单号：</div>
+    <div class="l-panel-search-item">
+        <input type="text" id="sbalanceCode" value=""/>
+    </div>
+
+    <div class="l-panel-search-item">
+        <select name="isEdit" id="sIsEdit" ltype="select">
+            <option value="">全部</option>
+            <option value="1">已补录</option>
+            <option value="0">未补录</option>
+        </select>
+    </div>
+    <div class="l-panel-search-item">
+        <div id="searchbtn" style="width:40px;">搜索</div>
+    </div>
+</div>
+
+<div id="maingrid"></div>
+
+<!--/////////////////////////////////////////////////////////////////////////-->
+<!--快递单详情页面-->
+<div id="balanceDetail">
+    <div style="float: left"><img id="balancePic" src="" border="0" width="750" height="550" /></div>
+    <div style="padding:10px 0 10px 10px;float: left">
+    <form name="form1" method="post" action="/replenishController/updateBalanceDetail.do" id="form1">
+        <input type="hidden" name="balanceId" id="balanceId" value=""/>
+        <div>
+        </div>
+        <table cellpadding="0" cellspacing="0" class="l-table-edit" >
+            <tr>
+                <td align="right" class="l-table-edit-td">快递单号:</td>
+                <td align="left" class="l-table-edit-td"><input name="balanceCode" type="text" id="balanceCode" readonly ltype="text" validate="{required:true,minlength:3,maxlength:64}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">客户名称:</td>
+                <td align="left" class="l-table-edit-td"><input name="customerId" type="text" id="customerId" ltype="text" validate="{required:true,minlength:1,maxlength:100}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">收款状态:</td>
+                <td align="left" class="l-table-edit-td">
+                    <select name="gatherState" id="gatherState" ltype="select">
+                        <option value="1">现结</option>
+                        <option value="2">月结</option>
+                        <option value="3">对付</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">应收金额:</td>
+                <td align="left" class="l-table-edit-td">
+                    <input name="money" type="text" id="money" ltype='spinner' ligerui="{type:'float',isNegative:false}" value="0" class="required" validate="{min:0,max:1000000}" />
+                </td><td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">结算状态:</td>
+                <td align="left" class="l-table-edit-td">
+                    <select name="payoffState" id="payoffState" ltype="select">
+                        <option value="1">已结</option>
+                        <option value="2">未结</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">快递员:</td>
+                <td align="left" class="l-table-edit-td"><input name="balanceUser" type="text" id="balanceUser" ltype="text" validate="{required:true,minlength:1,maxlength:100}" /></td>
+                <td align="left"></td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">收件日期:</td>
+                <td align="left" class="l-table-edit-td">
+                    <input name="addresseeDate" type="text" id="addresseeDate" ltype="date" validate="{required:true}" />
+                </td><td align="left"></td>
+            </tr>
+        </table>
+        <br />
+        <input type="submit" value="提交" id="Button1" class="l-button l-button-submit" />
+        <input type="button" value="重置" class="l-button l-button-test"/>
+    </form>
+    </div>
+</div>
+<!--/////////////////////////////////////////////////////////////////////////-->
+<script type="text/javascript">
+    //工具条事件
+    //    function toolbarBtnItemClick(item) {
+    //        switch (item.id) {
+    //            case "add":
+    //                top.f_addTab(null, '增加员工信息', 'BaseManage/EmployeesDetail.aspx');
+    //                break;
+    //            case "view":
+    //                var selected = grid.getSelected();
+    //                if (!selected) { LG.tip('请选择行!'); return }
+    //                top.f_addTab(null, '查看员工信息', 'BaseManage/EmployeesDetail.aspx?IsView=1&ID=' + selected.EmployeeID);
+    //                break;
+    //            case "modify":
+    //                var selected = grid.getSelected();
+    //                if (!selected) { LG.tip('请选择行!'); return }
+    //                top.f_addTab(null, '修改员工信息', 'BaseManage/EmployeesDetail.aspx?ID=' + selected.EmployeeID);
+    //                break;
+    //            case "delete":
+    //                jQuery.ligerDialog.confirm('确定删除吗?', function (confirm) {
+    //                    if (confirm)
+    //                        f_delete();
+    //                });
+    //                break;
+    //        }
+    //    }
+</script>
+</body>
+</html>

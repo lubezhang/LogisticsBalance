@@ -28,7 +28,7 @@ public interface IReplenishService {
      * @return
      * @throws Exception
      */
-    public Map<String,String> importBalance() throws Exception;
+    public Map<String,String> importBalance(Map<String, String> params) throws Exception;
 
     /**
      * 插入一条快递单信息

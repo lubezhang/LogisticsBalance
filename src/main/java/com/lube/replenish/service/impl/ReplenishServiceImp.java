@@ -81,7 +81,7 @@ public class ReplenishServiceImp implements IReplenishService {
     }
 
     @Override
-    public Map<String, String> importBalance() throws Exception {
+    public Map<String, String> importBalance(Map<String, String> params) throws Exception {
         String rootPath = CommonConst.BALANCE_ROOT_PATH + File.separator;
         String strSrcPath = rootPath + CommonConst.BALANCE_PIC_READY + File.separator;
 
@@ -94,7 +94,7 @@ public class ReplenishServiceImp implements IReplenishService {
                 balance.setBalanceId(BalanceUtils.generatorUUID());
                 balance.setBalanceCode(picName.substring(0, picName.indexOf(".")));
                 balance.setGatherState("2");
-                balance.setPayoffState("2");
+                balance.setPayoffState(params.get("payoffState"));
                 balance.setEdit("0");
                 balance.setBalanceUser("");
                 insertBalance(balance);

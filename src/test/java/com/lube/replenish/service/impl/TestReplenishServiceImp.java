@@ -40,7 +40,7 @@ public class TestReplenishServiceImp {
 
     public void testImportBalance() throws Exception{
         IReplenishService replenishService = context.getBean("replenishService", ReplenishServiceImp.class);
-        replenishService.importBalance();
+//        replenishService.importBalance();
     }
 
     public void testInsertBalance() throws Exception {

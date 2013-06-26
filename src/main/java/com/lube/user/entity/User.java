@@ -1,5 +1,7 @@
 package com.lube.user.entity;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: zhangqh
@@ -13,6 +15,7 @@ public class User {
     private String password;
     private String operatorName;
     private String operatorType;
+    private List<Menu> menuList;
 
     public String getOperatorId() {
         return operatorId;
@@ -52,6 +55,14 @@ public class User {
 
     public void setOperatorType(String operatorType) {
         this.operatorType = operatorType;
+    }
+
+    public List<Menu> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
     }
 
     @Override

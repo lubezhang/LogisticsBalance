@@ -133,36 +133,6 @@ function importBalance(params){
     );
 }
 
-var balanceWin = null;
-function editNext(){
-    SubmitUtils.getJSON(
-        "/replenishController/queryNextDetail.do",
-        "",
-        function(json){
-            if($.isEmptyObject(json)){
-                alert("系统错误！");
-                return;
-            }
-            if(!$.isEmptyObject(json.resultValue)){
-                for(var key in json.resultValue){
-                    $("#"+key).val(json.resultValue[key]);
-                }
-                $("#balancePic").attr("src",json.resultValue.picPath);
-                if(null == balanceWin){
-                    balanceWin = $.ligerDialog.open({title:"快递单详情",height: 200,showMax:true, isResize: false, target:$("#balanceDetail") });
-                    balanceWin.max();
-                } else {
-                    balanceWin.show();
-                }
-            } else {
-                alert("没有需要补录的快递单！", function(){
-                    balanceWin.close();
-                });
-            }
-        }
-    );
-}
-
 var deleteBalance = function(){
     var rows = gridManager.getSelectedRows();
     if(0 == rows.length){

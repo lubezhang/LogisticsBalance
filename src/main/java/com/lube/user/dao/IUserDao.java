@@ -1,5 +1,6 @@
 package com.lube.user.dao;
 
+import com.lube.user.entity.Menu;
 import com.lube.user.entity.User;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface IUserDao {
     void addUser(Map<String,String> params);
 
     void deleteUser(String[] ids);
+
+    List<Menu> queryUserChildMenu(Map<String, Object> params);
 }

@@ -1,5 +1,6 @@
 package com.lube.user.service;
 
+import com.lube.user.entity.Menu;
 import com.lube.utils.MD5EncryptUtils;
 import com.lube.user.dao.IUserDao;
 import com.lube.user.entity.User;
@@ -85,5 +86,19 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void deleteUser(String[] ids) throws LogisticsException {
         userDao.deleteUser(ids);
+    }
+
+    @Override
+    public List<Menu> queryUserMenu(String id) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("loginId","admin");
+        List<Menu> mainMenuList = userDao.queryUserChildMenu(params);
+        List<Menu> childMenuList = null;
+        for(int i = 0; i < mainMenuList.size(); i++){
+            params.put("parentCode",mainMenuList.get(i).getCode());
+            childMenuList = userDao.queryUserChildMenu(params);
+            mainMenuList.get(i).setChildMenu(childMenuList);
+        }
+        return mainMenuList;
     }
 }

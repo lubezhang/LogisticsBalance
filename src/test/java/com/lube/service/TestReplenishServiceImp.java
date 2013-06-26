@@ -1,7 +1,8 @@
-package com.lube.replenish.service.impl;
+package com.lube.service;
 
 import com.lube.replenish.entity.TBalance;
 import com.lube.replenish.service.IReplenishService;
+import com.lube.replenish.service.impl.ReplenishServiceImp;
 import com.lube.utils.BalanceUtils;
 import junit.framework.Assert;
 import org.junit.Before;

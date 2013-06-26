@@ -9,6 +9,7 @@
     <typeAliases>
         <typeAlias alias="tBalance" type="com.lube.replenish.entity.TBalance"/>
         <typeAlias alias="user" type="com.lube.user.entity.User"/>
+        <typeAlias alias="menu" type="com.lube.user.entity.Menu"/>
     </typeAliases>
     <mappers>
         <mapper resource="mapper/balanceMapper.xml" />

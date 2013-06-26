@@ -5,8 +5,10 @@ import com.lube.utils.LigerUtils;
 import com.lube.user.entity.User;
 import com.lube.user.service.IUserService;
 import com.lube.utils.LogisticsException;
+import com.lube.utils.WebUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +40,8 @@ public class UserController {
     private IUserService userService;
 
     @RequestMapping("index")
-    public String index() throws Exception {
+    public String index(Model model) throws Exception {
+        model.addAttribute("loginId", WebUtils.getCurrUser().getUsername());
         return "index";
     }
 
@@ -70,6 +73,7 @@ public class UserController {
         try {
             oper = userService.verifyLogin(user);
             if(null != oper){
+                oper.setMenuList(userService.queryUserMenu(user.getUsername()));
 //                request.getSession().setAttribute(CommonConst.OPERATOR_SESSION_KEY, oper);
                 ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
                 HttpSession session = attr == null ? null : attr.getRequest().getSession(true);
@@ -132,5 +136,11 @@ public class UserController {
             rsMap = LigerUtils.resultFail("删除用户失败！");
         }
         return rsMap;
+    }
+
+    @RequestMapping("queryUserMenu")
+    @ResponseBody
+    public Map<String, Object> queryUserMenu(String loginId){
+        return LigerUtils.resultValueSucess("", WebUtils.getCurrUser().getMenuList());
     }
 }

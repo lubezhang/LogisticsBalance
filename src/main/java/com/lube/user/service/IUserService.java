@@ -1,5 +1,6 @@
 package com.lube.user.service;
 
+import com.lube.user.entity.Menu;
 import com.lube.user.entity.User;
 import com.lube.utils.LogisticsException;
 
@@ -34,4 +35,11 @@ public interface IUserService {
     void checkUserName(String userName) throws LogisticsException;
 
     void deleteUser(String[] ids) throws LogisticsException;
+
+    /**
+     * 获取登录用户的所有菜单
+     * @param id
+     * @return
+     */
+    List<Menu> queryUserMenu(String id) throws LogisticsException;
 }

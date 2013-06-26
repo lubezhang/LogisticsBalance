@@ -27,12 +27,9 @@ $(function(){
         dataAction: 'server',
         pageSize: 20,
         toolbar: { items: [
-            { id:"import", text: '导入快递单', click: itemclick, icon: 'add' },
-            { line: true },
             { id:"lock", text: '锁定', click: itemclick, icon: 'lock' },
             { line: true },
-            { id:"edit", text: '补录', click: itemclick, icon: 'edit' },
-            { id:"delete", text: '删除', click: itemclick, icon: 'delete' }
+            { id:"edit", text: '补录', click: itemclick, icon: 'edit' }
 
         ]},
         url: '/replenishController/queryBalanceList.do?queryType=replenish&payoffState=2',
@@ -98,14 +95,8 @@ function initForm(){
 //菜单按钮单击事件
 function itemclick(item){
     switch (item.id){
-        case "import":
-            importBalance();
-            break;
         case "edit":
             editNext();
-            break;
-        case "delete":
-            deleteBalance();
             break;
         case "lock":
             lockBalance();
@@ -115,25 +106,6 @@ function itemclick(item){
         default:
             break;
     }
-}
-//导入快递单图片
-function importBalance(){
-    SubmitUtils.getJSON(
-        "/replenishController/importPic.do",
-        "",
-        function(json){
-            if(json){
-                var strComplete = "";
-                if(json.success){
-                    strComplete = "导入完成。成功【"+json.resultValue.completeCount+"】条，失败【"+json.resultValue.errorCount+"】条";
-                    alert(strComplete,"处理信息");
-                } else {
-                    strComplete = json.message;
-                    alert(strComplete,"处理信息");
-                }
-            }
-        }
-    );
 }
 
 var balanceWin = null;
@@ -160,36 +132,6 @@ function editNext(){
             } else {
                 alert("没有需要补录的快递单！", function(){
                     balanceWin.close();
-                });
-            }
-        }
-    );
-}
-
-var deleteBalance = function(){
-    var rows = gridManager.getSelectedRows();
-    if(0 == rows.length){
-        alert("请选择需要删除的快递单信息。");
-    }
-    var ids = "";
-    for(var i = 0; i < rows.length; i++){
-        if(0 == i){
-            ids += rows[i].balanceId;
-        } else {
-            ids += ","+rows[i].balanceId;
-        }
-    }
-    SubmitUtils.getJSON(
-        "/replenishController/deleteBalance.do",
-        {"ids":ids},
-        function(json){
-            if(json.success){
-                alert(json.message, function(){
-                    gridManager.loadData(true);
-                });
-            } else {
-                error(json.message, function(){
-                    gridManager.loadData(true);
                 });
             }
         }

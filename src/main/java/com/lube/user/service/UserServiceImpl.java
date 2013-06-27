@@ -91,7 +91,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<Menu> queryUserMenu(String id) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("loginId","admin");
+        params.put("loginId",id);
         List<Menu> mainMenuList = userDao.queryUserChildMenu(params);
         List<Menu> childMenuList = null;
         for(int i = 0; i < mainMenuList.size(); i++){

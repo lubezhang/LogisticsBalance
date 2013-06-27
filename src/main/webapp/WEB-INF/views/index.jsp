@@ -45,7 +45,7 @@
     </div>
 </div>
 <div id="layout1" style="width:99.2%; margin:0 auto; margin-top:4px; ">
-    <div position="left" title="主要菜单" id="accordion1">
+    <div position="left" title="主要菜单" id="menuContainer">
         <!--<div title="功能列表" class="l-scroll">-->
         <!--<ul id="tree1" style="margin-top:3px;"></ul>-->
         <!--</div>-->

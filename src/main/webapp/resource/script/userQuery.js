@@ -42,9 +42,6 @@ $(function(){
     gridManager = $("#maingrid").ligerGetGridManager();
     $("#pageloading").hide();
     initForm();
-
-//    $("#s_addrDateBegin").ligerDateEditor({ label: '收件日期', labelWidth: 60, labelAlign: 'right' });
-//    $("#s_addrDateEnd").ligerDateEditor({ label: '至', labelWidth: 20, labelAlign: 'center' });
 });
 
 

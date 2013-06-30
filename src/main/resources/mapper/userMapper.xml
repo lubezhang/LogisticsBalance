@@ -59,6 +59,13 @@
           (#{operatorId},#{username},#{password},#{operatorName},#{operatorType})
     </insert>
 
+    <insert id="addUserRole" parameterType="Map">
+        INSERT INTO
+          t_sys_user_role(loginId, roleId)
+        VALUES
+          (#{loginId}, #{roleId})
+    </insert>
+
     <delete id="deleteUser" parameterType="String">
         DELETE FROM t_operator WHERE OPERATOR_ID in
         <foreach collection="array" item="ids" open="(" separator="," close=")">

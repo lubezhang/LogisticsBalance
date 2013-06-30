@@ -16,7 +16,6 @@
         .l-table-edit {}
         .l-table-edit-td{ padding:4px;}
         .l-button-submit,.l-button-test{width:80px; float:left; margin-left:10px; padding-bottom:2px;}
-        .l-verify-tip{ left:230px; top:120px;}
     </style>
 </head>
 <body style="padding:0px; overflow:hidden;">
@@ -59,7 +58,7 @@
                 <td align="left"></td>
             </tr>
             <tr>
-                <td align="right" class="l-table-edit-td">名称:</td>
+                <td align="right" class="l-table-edit-td">姓名:</td>
                 <td align="left" class="l-table-edit-td"><input name="operatorName" type="text" id="operatorName" ltype="text" validate="{required:true,minlength:5,maxlength:64}" /></td>
                 <td align="left"></td>
             </tr>
@@ -69,6 +68,16 @@
                     <select name="operatorType" id="operatorType" ltype="select">
                         <option value="1">管理员</option>
                         <option value="2">普通用户</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="l-table-edit-td">用户角色:</td>
+                <td align="left" class="l-table-edit-td">
+                    <select name="roleId" id="roleId" ltype="select">
+                        <option value="31">系统理员</option>
+                        <option value="32">快递单补录员</option>
+                        <option value="33">快递单结算员</option>
                     </select>
                 </td>
             </tr>

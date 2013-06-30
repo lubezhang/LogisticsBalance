@@ -20,6 +20,7 @@ public interface IUserDao {
     int queryAllUserCount(Map<String, Object> params);
 
     void addUser(Map<String,String> params);
+    void addUserRole(Map<String,String> params);
 
     void deleteUser(String[] ids);
 

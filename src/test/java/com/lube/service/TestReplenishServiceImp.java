@@ -33,7 +33,7 @@ public class TestReplenishServiceImp {
 
     public void testGetPicList() throws Exception {
         IReplenishService replenishService = context.getBean("replenishService", ReplenishServiceImp.class);
-        List<String> list = replenishService.getPicList();
+        List<String> list = replenishService.getPicList("");
         Assert.assertNotNull(list);
         Assert.assertTrue(0 != list.size());
         System.out.println(list);
@@ -46,7 +46,7 @@ public class TestReplenishServiceImp {
 
     public void testInsertBalance() throws Exception {
         IReplenishService replenishService = context.getBean("replenishService", ReplenishServiceImp.class);
-        List<String> list = replenishService.getPicList();
+        List<String> list = replenishService.getPicList("");
         TBalance entity = new TBalance();
         for (int i = 0; i < list.size(); i++){
             entity.setBalanceId(BalanceUtils.generatorUUID());

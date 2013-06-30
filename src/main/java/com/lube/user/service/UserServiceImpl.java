@@ -68,6 +68,8 @@ public class UserServiceImpl implements IUserService {
             params.put("operatorId", BalanceUtils.generatorUUID());
             params.put("password", MD5EncryptUtils.MD5Encode(params.get("password")));
             userDao.addUser(params);
+            params.put("loginId", params.get("username"));
+            userDao.addUserRole(params);
         } catch (Exception e){
             throw new LogisticsException("添加用户异常：",e);
         }

@@ -2,6 +2,7 @@ package com.lube.common;
 
 import com.lube.common.license.ILicense;
 import com.lube.common.license.UsbKeyLicense;
+import com.lube.replenish.service.impl.ReplenishServiceImp;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
@@ -23,12 +24,14 @@ public class InitServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
+
         CommonConst.BALANCE_ROOT_PATH = config.getServletContext().getRealPath("/") + CommonConst.BALANCE_PIC_CONTEXT;
 
         logger.info("=====检查系统授权====");
         ILicense license = new UsbKeyLicense();
         if(license.verifyLicense()){
 //        if(true){
+            ReplenishServiceImp.initFilePath();
             CommonConst.validLicense = true;
             logger.info("=====通过系统授权验证，系统正常启动！====");
         } else {

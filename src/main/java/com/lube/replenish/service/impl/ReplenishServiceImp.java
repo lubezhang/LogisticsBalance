@@ -41,12 +41,18 @@ public class ReplenishServiceImp implements IReplenishService {
     /**
      * 初始化文件目录结构
      */
-    private void initFilePath() {
+    public static void initFilePath() {
+        logger.info("初始化快递单导入路径");
         String rootPath = CommonConst.BALANCE_ROOT_PATH;
 
-        File fileReady = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY);
-        if (!fileReady.exists()) {
-            fileReady.mkdirs();
+        File fileReadyReplenish = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY + File.separator + "replenish");
+        if (!fileReadyReplenish.exists()) {
+            fileReadyReplenish.mkdirs();
+        }
+
+        File fileReadyQuery = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY + File.separator + "query");
+        if (!fileReadyQuery.exists()) {
+            fileReadyQuery.mkdirs();
         }
 
         File fileComplete = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_COMPLETE);
@@ -61,10 +67,11 @@ public class ReplenishServiceImp implements IReplenishService {
     }
 
     @Override
-    public List<String> getPicList() throws Exception {
+    public List<String> getPicList(String strFilePath) throws Exception {
         initFilePath();
-        String rootPath = CommonConst.BALANCE_ROOT_PATH;
-        File filePath = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY);
+//        String rootPath = CommonConst.BALANCE_ROOT_PATH;
+//        File filePath = new File(rootPath + File.separator + CommonConst.BALANCE_PIC_READY);
+        File filePath = new File(strFilePath);
         File[] files = filePath.listFiles();
         if (null == files) throw new LogisticsException("没有需要处理的图片！" + filePath);
 
@@ -83,9 +90,14 @@ public class ReplenishServiceImp implements IReplenishService {
     @Override
     public Map<String, String> importBalance(Map<String, String> params) throws Exception {
         String rootPath = CommonConst.BALANCE_ROOT_PATH + File.separator;
-        String strSrcPath = rootPath + CommonConst.BALANCE_PIC_READY + File.separator;
+        String strSrcPath = "";
+        if("2".equals(params.get("payoffState"))){
+            strSrcPath = rootPath + CommonConst.BALANCE_PIC_READY + File.separator  + "replenish"+ File.separator;
+        } else if("1".equals(params.get("payoffState"))){
+            strSrcPath = rootPath + CommonConst.BALANCE_PIC_READY + File.separator  + "query" + File.separator;
+        }
 
-        List<String> picList = getPicList();
+        List<String> picList = getPicList(strSrcPath);
         TBalance balance = new TBalance();
         int completeCount = 0;
         int errorCount = 0;

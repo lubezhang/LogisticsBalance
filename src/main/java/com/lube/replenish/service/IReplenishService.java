@@ -21,7 +21,7 @@ public interface IReplenishService {
      * @return
      * @throws Exception
      */
-    public List<String> getPicList() throws Exception;
+    public List<String> getPicList(String filePath) throws Exception;
 
     /**
      * 将快递单图片信息导入到数据库中

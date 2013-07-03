@@ -85,7 +85,10 @@ function keyListener(e){
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td align="center"><input name="" id="lgBtn" type="button" class="lgBtn" onClick="submitForm();" /></td>
+    <td align="center">
+        <%--<input type="checkbox" id="anonymity" value=""><label for="anonymity">匿名登录</label>--%>
+        <input name="" id="lgBtn" type="button" class="lgBtn" onClick="submitForm();" />
+    </td>
   </tr>
   <tr>
     <td colspan="2" align="center"><span class="err"></span></td>

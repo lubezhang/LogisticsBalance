@@ -25,8 +25,8 @@ $(function(){
         toolbar: { items: [
             { id:"add", text: '添加', click: itemclick, icon: 'add' },
             { line: true },
-            { id:"edit", text: '修改', click: itemclick, icon: 'edit' },
-            { line: true },
+//            { id:"edit", text: '修改', click: itemclick, icon: 'edit' },
+//            { line: true },
             { id:"delete", text: '删除', click: itemclick, icon: 'delete' },
             { line: true }
         ]},

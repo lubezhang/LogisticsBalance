@@ -87,7 +87,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteUser(String[] ids) throws LogisticsException {
-        userDao.deleteUser(ids);
+        try{
+            userDao.deleteUserRole(ids);
+            userDao.deleteUser(ids);
+        } catch(Exception e){
+            throw new LogisticsException(e);
+        }
     }
 
     @Override

@@ -34,6 +34,7 @@
             <if test=" operatorName != null and operatorName != ''">
                 and OPERATOR_NAME like '%' #{operatorName} '%'
             </if>
+            <![CDATA[ and OPERATOR_TYPE <> 0 ]]>
         </where>
         <if test=" pagesize != null and pagesize != ''">
             limit #{page},#{pagesize}
@@ -61,9 +62,9 @@
 
     <insert id="addUserRole" parameterType="Map">
         INSERT INTO
-          t_sys_user_role(loginId, roleId)
+          t_sys_user_role(operateId,loginId, roleId)
         VALUES
-          (#{loginId}, #{roleId})
+          (#{operatorId},#{username}, #{roleId})
     </insert>
 
     <delete id="deleteUser" parameterType="String">
@@ -73,12 +74,21 @@
         </foreach>
     </delete>
 
+    <delete id="deleteUserRole" parameterType="String">
+        DELETE FROM t_sys_user_role WHERE operateId in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
     <!--用户所获得权限对应的菜单-->
     <select id="queryUserChildMenu" parameterType="java.util.Map" resultType="menu">
         select
-          c.code,c.parentCode, c.level, c.title, c.url from  t_sys_user_role a, t_sys_role_menu b, t_sys_menu c
+        c.code,c.parentCode, c.level, c.title, c.url
+        from
+        t_sys_user_role a, t_sys_role_menu b, t_sys_menu c, t_operator d
         where
-          a.roleId = b.roleId and b.code = c.code and a.loginId = #{loginId}
+        a.roleId = b.roleId and b.code = c.code and a.operateId = d.OPERATOR_ID and d.USERNAME = #{loginId}
 
         <if test=" parentCode == null">
             and c.parentCode is null

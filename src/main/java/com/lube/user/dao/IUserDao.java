@@ -23,6 +23,7 @@ public interface IUserDao {
     void addUserRole(Map<String,String> params);
 
     void deleteUser(String[] ids);
+    void deleteUserRole(String[] ids);
 
     List<Menu> queryUserChildMenu(Map<String, Object> params);
 }

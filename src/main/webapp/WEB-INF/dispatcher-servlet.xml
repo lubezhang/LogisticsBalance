@@ -77,7 +77,7 @@
     <!--<context:spring-configured/>-->
 
     <task:scheduled-tasks>
-        <task:scheduled ref="licenseTask" method="verifyLicense" cron="1 * * * * ?"/>
+        <task:scheduled ref="licenseTask" method="verifyLicense" cron="0 0/20 * * * ?"/>
     </task:scheduled-tasks>
 
     <context:component-scan base-package="com.lube.common.license" />

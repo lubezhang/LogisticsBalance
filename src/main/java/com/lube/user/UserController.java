@@ -110,7 +110,7 @@ public class UserController {
         try {
             userService.checkUserName(params.get("username"));
         } catch (LogisticsException e) {
-            return LigerUtils.resultFail(e.getMessage());
+            return LigerUtils.resultSuccess(e.getMessage());
         }
 
         Map<String, Object> rsMap = null;

@@ -227,6 +227,17 @@
         </foreach>
     </update>
 
+    <!--解除快递单锁定状态，恢复到刚刚导入的状态-->
+    <update id="unlockBalance" parameterType="Map">
+        update
+          t_balance set LOCK_USER = null
+        where
+          BALANCE_ID in
+        <foreach collection="ids" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </update>
+
     <!--变更快递单结算状态为已结-->
     <update id="updatePayOff" parameterType="Map">
         update t_balance set PAYOFF_STATE = 1  WHERE BALANCE_ID in

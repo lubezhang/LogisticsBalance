@@ -39,6 +39,7 @@ public interface IReplenishDao {
 
     void deleteBalance(String[] ids);
     void lockBalance(Map<String, Object> params);
+    void unlockBalance(Map<String, Object> params);
 
     void updatePayOff(String[] ids);
 }

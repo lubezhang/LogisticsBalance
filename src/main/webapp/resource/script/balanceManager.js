@@ -5,8 +5,8 @@ $(function(){
         gridManager.setOptions(
             { parms: [
                 { name: 'balanceCode', value: $("#sbalanceCode").val()},
-                { name: 'isEdit', value: $("#sIsEdit").val()},
-                { name: 'queryType', value: "replenish"}
+                { name: 'customerId', value: $("#sCustomerName").val()}
+//                { name: 'queryType', value: "replenish"}
             ] }
         );
         gridManager.loadData(true);
@@ -29,12 +29,12 @@ $(function(){
         toolbar: { items: [
             { id:"import", text: '导入补录快递单', click: itemclick, icon: 'add' },
             { line: true },
-//            { id:"edit", text: '编辑', click: itemclick, icon: 'edit' },
+            { id:"unlock", text: '解锁', click: itemclick, icon: 'edit' },
             { id:"delete", text: '删除', click: itemclick, icon: 'delete' },
             { line: true },
             { id:"importQuery", text: '导入查询快递单', click: itemclick, icon: 'add' }
         ]},
-        url: '/replenishController/queryBalanceList.do?queryType=replenish',
+        url: '/replenishController/queryBalanceList.do',
         sortName: 'operatorDate',
         width: '100%', height: '100%',
         heightDiff:0, checkbox: true,
@@ -103,8 +103,8 @@ function itemclick(item){
         case "importQuery":
             importBalance({"payoffState":"1"});
             break;
-        case "edit":
-            editNext();
+        case "unlock":
+            unlock();
             break;
         case "delete":
             deleteBalance();
@@ -148,6 +148,36 @@ var deleteBalance = function(){
     }
     SubmitUtils.getJSON(
         "/replenishController/deleteBalance.do",
+        {"ids":ids},
+        function(json){
+            if(json.success){
+                alert(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            } else {
+                error(json.message, function(){
+                    gridManager.loadData(true);
+                });
+            }
+        }
+    );
+}
+
+var unlock = function(){
+    var rows = gridManager.getSelectedRows();
+    if(0 == rows.length){
+        alert("请选择需要删除的快递单信息。");
+    }
+    var ids = "";
+    for(var i = 0; i < rows.length; i++){
+        if(0 == i){
+            ids += rows[i].balanceId;
+        } else {
+            ids += ","+rows[i].balanceId;
+        }
+    }
+    SubmitUtils.getJSON(
+        "/replenishController/unlockBalance.do",
         {"ids":ids},
         function(json){
             if(json.success){

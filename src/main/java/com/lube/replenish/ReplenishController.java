@@ -228,6 +228,20 @@ public class ReplenishController {
         return rsMap;
     }
 
+    @RequestMapping("unlockBalance")
+    public @ResponseBody Map<String, Object> unlockBalance(String[] ids){
+        Map<String, Object> rsMap = null;
+        try {
+            User user = WebUtils.getCurrUser();
+            replenishService.unlockBalance(ids, user);
+            rsMap = LigerUtils.resultSuccess("锁定快递单成功！");
+        } catch (LogisticsException e) {
+            logger.error(e);
+            rsMap = LigerUtils.resultFail("锁定快递单失败！");
+        }
+        return rsMap;
+    }
+
     /**
      *
      * @param ids

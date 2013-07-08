@@ -315,6 +315,14 @@ public class ReplenishServiceImp implements IReplenishService {
     }
 
     @Override
+    public void unlockBalance(String[] ids, User user) throws LogisticsException {
+        Map<String, Object> params = new HashMap<String, Object>(0);
+        params.put("ids", ids);
+        params.put("userId", user.getOperatorId());
+        iReplenishDao.unlockBalance(params);
+    }
+
+    @Override
     public void updatePayOff(String[] ids) throws LogisticsException {
         iReplenishDao.updatePayOff(ids);
     }

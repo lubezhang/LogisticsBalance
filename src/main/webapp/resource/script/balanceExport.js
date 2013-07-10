@@ -39,7 +39,7 @@ $(function(){
             { id:"status", text: '快递单结算', click: itemclick, icon: 'status' },
             { line: true }
         ]},
-        url: '/replenishController/queryBalanceList.do?queryType=export',
+        url: '/replenishController/queryBalanceList.do?queryType=export&isEdit=1',
         sortName: 'operatorDate',
         width: '100%', height: '100%',
         heightDiff:0, checkbox: true,

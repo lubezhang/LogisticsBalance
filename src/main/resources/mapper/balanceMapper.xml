@@ -161,15 +161,14 @@
 
     <select id="queryBalanceDetail" parameterType="tBalance" resultMap="balanceMap">
         select
-            BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE, GATHER_STATE,MONEY, PAYOFF_STATE,ADDRESSEE_DATE
+            BALANCE_ID,CUSTOMER_ID,OPERATOR_ID,BALANCE_CODE, GATHER_STATE,MONEY, PAYOFF_STATE,ADDRESSEE_DATE, BALANCE_USER
         from
             t_balance t1
         <where>
-            <if test=" balanceCode != null and balanceCode != ''">
-                BALANCE_CODE = #{balanceCode}
+            <if test=" balanceId != null and balanceId != ''">
+                BALANCE_ID = #{balanceId}
             </if>
         </where>
-        limit 1
     </select>
 
     <update id="updateBalance" parameterType="tBalance">

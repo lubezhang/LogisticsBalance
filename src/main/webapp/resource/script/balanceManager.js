@@ -30,6 +30,7 @@ $(function(){
             { id:"import", text: '导入补录快递单', click: itemclick, icon: 'add' },
             { line: true },
             { id:"unlock", text: '解锁', click: itemclick, icon: 'edit' },
+            { id:"edit", text: '编辑', click: itemclick, icon: 'edit' },
             { id:"delete", text: '删除', click: itemclick, icon: 'delete' },
             { line: true },
             { id:"importQuery", text: '导入查询快递单', click: itemclick, icon: 'add' }
@@ -76,7 +77,8 @@ function initForm(){
                 function(json){
                     if(json.success){
                         $.ligerDialog.alert("修改成功", "处理信息",'',function(){
-                            editNext();
+                            balanceEditWin.close();
+//                            balanceWin.destroy();
                         });
                     } else {
                         alert("修改失败"+json.success,"处理信息");
@@ -105,6 +107,9 @@ function itemclick(item){
             break;
         case "unlock":
             unlock();
+            break;
+        case "edit":
+            editBalance();
             break;
         case "delete":
             deleteBalance();
@@ -187,6 +192,45 @@ var unlock = function(){
             } else {
                 error(json.message, function(){
                     gridManager.loadData(true);
+                });
+            }
+        }
+    );
+}
+
+var balanceEditWin = null;
+var editBalance = function(){
+    var rows = gridManager.getSelectedRows();
+    if(0 == rows.length){
+        alert("请选择需要删除的快递单信息。");
+        return;
+    } else if(1 != rows.length){
+        alert("只能选择一个快递单。");
+        return;
+    }
+
+    SubmitUtils.getJSON(
+        "/replenishController/queryBalanceDetail.do",
+        {"balanceId":rows[0].balanceId},
+        function(json){
+            if($.isEmptyObject(json)){
+                alert("系统错误！");
+                return;
+            }
+            if(!$.isEmptyObject(json.resultValue)){
+                for(var key in json.resultValue){
+                    $("#"+key).val(json.resultValue[key]);
+                }
+                $("#balancePic").attr("src",json.resultValue.picPath);
+                if(null == balanceEditWin){
+                    balanceEditWin = $.ligerDialog.open({title:"快递单详情",isHidden:true,height: 200,showMax:true, isResize: false, target:$("#balanceDetail") });
+                    balanceEditWin.max();
+                } else {
+                    balanceEditWin.show();
+                }
+            } else {
+                alert("没有需要修改的快递单！", function(){
+                    balanceEditWin.close();
                 });
             }
         }

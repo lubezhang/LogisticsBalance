@@ -91,10 +91,10 @@ public class ReplenishController {
     }
 
     @RequestMapping("queryBalanceDetail")
-    public @ResponseBody Map<String, Object> queryBalanceDetail(@RequestParam Map<String, String> params){
-        TBalance entity = new TBalance();
-        entity.setBalanceId(params.get("balanceId"));
-        entity.setBalanceCode(params.get("balanceCode"));
+    public @ResponseBody Map<String, Object> queryBalanceDetail(TBalance entity){
+//        TBalance entity = new TBalance();
+//        entity.setBalanceId(params.get("balanceId"));
+//        entity.setBalanceCode(params.get("balanceCode"));
 
         Map<String, Object> map = null;
         try {
